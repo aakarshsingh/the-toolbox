@@ -15,7 +15,7 @@
     <name>The Personal Toolbox</name>
     <description>This contains POCs with Spring, Caffeine, Gson, Java Data/Time, etc</description>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -27,6 +27,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 
