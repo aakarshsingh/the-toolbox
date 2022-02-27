@@ -65,16 +65,18 @@ public class Explorer {
    *
    * <ul>
    *   <li>Streams
-   *   <li>Lambdas, Changes to Interfaces & Method References
+   *   <li>Lambdas
+   *   <li>Changes to Interfaces & Method References
    *   <li>New Date & Time APIs
    * </ul>
    */
   private static void java8() throws Exception {
     // Features added in Java 8
 
-    java8_streams();
-    java8_lambdas();
-    java8_date_time();
+    streams();
+    lambdas();
+    interfaces();
+    date_time();
 
     // System.exit(0);
   }
@@ -83,13 +85,23 @@ public class Explorer {
    * Features added in Java 9:
    *
    * <ul>
-   *   <li>
-   *   <li>
-   *   <li>
+   *   <li>Factory Methods for Collections
+   *   <li>Stream API improvements
+   *   <li>Optional Class Enhancements
+   *   <li>Private interface methods
+   *   <li>HTTP/2 Client
+   *   <li>Java 9 - Language Modifications
    * </ul>
    */
-  private static void java9() {
+  private static void java9() throws Exception {
     // Features added in Java 9
+
+    collections();
+    streams();
+    optional();
+    interfaces();
+    http_client();
+    java9_language_modifications();
 
     // System.exit(0);
   }
@@ -98,13 +110,17 @@ public class Explorer {
    * Features added in Java 10:
    *
    * <ul>
-   *   <li>
-   *   <li>
-   *   <li>
+   *   <li>Local Variable Type Inference
+   *   <li>Unmodifiable Collections
+   *   <li>Optional*.orElseThrow()
    * </ul>
    */
   private static void java10() {
     // Features added in Java 10
+
+    var();
+    collections();
+    optional();
 
     // System.exit(0);
   }
@@ -113,13 +129,25 @@ public class Explorer {
    * Features added in Java 11:
    *
    * <ul>
-   *   <li>
-   *   <li>
-   *   <li>
+   *   <li>HTTP Client
+   *   <li>Local-Variable Syntax for Lambda Parameters
+   *   <li>New String Methods
+   *   <li>New File Methods
+   *   <li>Collection to an Array
+   *   <li>The Not Predicate Method
+   *   <li>Nest Based Access Control
    * </ul>
    */
   private static void java11() {
     // Features added in Java 11
+
+    http_client();
+    var();
+    string();
+    file();
+    collections();
+    not_predicate();
+    access_control();
 
     // System.exit(0);
   }
@@ -128,13 +156,19 @@ public class Explorer {
    * Features added in Java 12:
    *
    * <ul>
-   *   <li>
-   *   <li>
-   *   <li>
+   *   <li>String Class New Methods
+   *   <li>File::mismatch Method
+   *   <li>Teeing Collector
+   *   <li>Compact Number Formatting
    * </ul>
    */
   private static void java12() {
     // Features added in Java 12
+
+    string();
+    file();
+    teeing();
+    number();
 
     // System.exit(0);
   }
@@ -143,13 +177,13 @@ public class Explorer {
    * Features added in Java 13:
    *
    * <ul>
-   *   <li>
-   *   <li>
-   *   <li>
+   *   <li>Switch Expressions
    * </ul>
    */
   private static void java13() {
     // Features added in Java 13
+
+    switch_expression();
 
     // System.exit(0);
   }
@@ -158,13 +192,17 @@ public class Explorer {
    * Features added in Java 14:
    *
    * <ul>
-   *   <li>
-   *   <li>
-   *   <li>
+   *   <li>Records
+   *   <li>Pattern Matching for instanceof
+   *   <li>Helpful NullPointerExceptions
    * </ul>
    */
   private static void java14() {
     // Features added in Java 14
+
+    records();
+    instance_of();
+    npe();
 
     // System.exit(0);
   }
@@ -173,13 +211,17 @@ public class Explorer {
    * Features added in Java 15:
    *
    * <ul>
-   *   <li>
-   *   <li>
-   *   <li>
+   *   <li>Text Blocks
+   *   <li>Sealed Classes
+   *   <li>Hidden Classes
+   *   <li>Pattern Matching Type Checks
    * </ul>
    */
   private static void java15() {
     // Features added in Java 15
+
+    text_blocks();
+    classes();
 
     // System.exit(0);
   }
@@ -188,13 +230,25 @@ public class Explorer {
    * Features added in Java 16:
    *
    * <ul>
-   *   <li>
-   *   <li>
-   *   <li>
+   *   <li>Invoke Default Methods From Proxy Instances
+   *   <li>Day Period Support
+   *   <li>Add Stream.toList Method
+   *   <li>Vector API Incubator
+   *   <li>Records
+   *   <li>Pattern Matching for instanceof
+   *   <li>Sealed Classes
    * </ul>
    */
-  private static void java16() {
+  private static void java16() throws Exception {
     // Features added in Java 16
+
+    default_methods();
+    date_time();
+    streams();
+    vector();
+    records();
+    instance_of();
+    classes();
 
     // System.exit(0);
   }
@@ -203,26 +257,272 @@ public class Explorer {
    * Features added in Java 17:
    *
    * <ul>
-   *   <li>
-   *   <li>
-   *   <li>
+   *   <li>Enhanced Pseudo-Random Number Generators
+   *   <li>Sealed Classes
+   *   <li>Pattern Matching for Switch
+   *   <li>Vector API
    * </ul>
    */
   private static void java17() {
     // Features added in Java 17
 
+    number();
+    classes();
+    switch_expression();
+    vector();
+
     // System.exit(0);
   }
 
-  // =========== Java 8 ============================================================================
-  private static void java8_streams() throws Exception {
+  // =========== Language Changes=================================================================
+  private static void access_control() {}
+
+  private static void classes() {}
+
+  private static void collections() {}
+
+  private static void date_time() throws Exception {
     LOGGER.info(
-        "Streams are abstract constructs used for processing sequence of elements. It allows you to "
+        "Java 8 :: All java.time objects are immutable. "
+            + "An Instant is a point on the time line. "
+            + "A Duration is the difference between two instants. "
+            + "LocalDateTime has no time zone information. "
+            + "ZonedDateTime is a point in time in a given time zone. "
+            + "Other important classes are Temporal Adjuster, Period & DateTimeFormatter. "
+            + "All of these have methods around plus, minus and other common helpers");
+    delayBuffer();
+
+    LOGGER.info("Java 8 :: Instant & Duration");
+    {
+      Instant start = Instant.now();
+      Thread.sleep(TimeUnit.SECONDS.toMillis(5L));
+      Instant end = Instant.now();
+
+      Duration timeElapsed = Duration.between(start, end);
+      System.out.println("Elapsed ms :: " + timeElapsed.toMillis());
+
+      Duration shouldBeLessThanOne = timeElapsed.minusSeconds(5);
+
+      System.out.println("shouldBeLessThanOne = " + shouldBeLessThanOne);
+      delayBuffer();
+    }
+
+    LOGGER.info("Java 8 :: Local APIs");
+    {
+      LocalDate today = LocalDate.now();
+      System.out.println("today = " + today);
+
+      LocalDate myBirthday = LocalDate.of(1993, 11, 15);
+      System.out.println("myBirthday = " + myBirthday);
+
+      LocalDate myBirthdayUsingMonthEnum = LocalDate.of(1993, Month.NOVEMBER, 15);
+      System.out.println("myBirthdayUsingMonthEnum = " + myBirthdayUsingMonthEnum);
+
+      long age = myBirthday.until(today, ChronoUnit.YEARS);
+      System.out.println("age = " + age);
+
+      LocalTime rightNow = LocalTime.now();
+      System.out.println("rightNow = " + rightNow);
+
+      LocalTime secretTime = LocalTime.of(23, 39);
+      System.out.println("secretTime = " + secretTime);
+
+      LocalTime tenHoursAfterSecret = secretTime.plus(10, ChronoUnit.HOURS);
+      System.out.println("tenHoursAfterSecret = " + tenHoursAfterSecret);
+
+      // compute specific dates, in this example lets see next workday from now
+      TemporalAdjuster NEXT_WORKDAY =
+          w -> {
+            LocalDate result = (LocalDate) w;
+            do {
+              result = result.plusDays(1);
+            } while (result.getDayOfWeek().getValue() >= DayOfWeek.SATURDAY.getValue());
+            return result;
+          };
+      LocalDate backToWork = today.with(NEXT_WORKDAY);
+      System.out.println("backToWork = " + backToWork);
+
+      // finding first Sunday after India won the 1983 World Cup
+      LocalDate firstSundayAfter83Win =
+          LocalDate.of(1983, Month.JUNE, 25).with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
+      System.out.println("firstSundayAfter83Win = " + firstSundayAfter83Win);
+
+      delayBuffer();
+    }
+
+    LOGGER.info("Java 8 :: Zoned APIs");
+    {
+      ZonedDateTime indiaWins2011WorldCup =
+          ZonedDateTime.of(2011, 4, 2, 23, 31, 0, 0, ZoneId.of("Asia/Kolkata"));
+      System.out.println("indiaWins2011WorldCup = " + indiaWins2011WorldCup);
+
+      // Use Period when adjusting across time boundaries (takes into account the DST)
+      // Duration won't work with Daylight Savings
+      ZonedDateTime oneWeekLater = indiaWins2011WorldCup.plus(Period.ofDays(7));
+      System.out.println("oneWeekLater = " + oneWeekLater);
+
+      delayBuffer();
+    }
+
+    LOGGER.info("Java 8 :: Formatting");
+    {
+      ZonedDateTime indiaWins2011WorldCup =
+          ZonedDateTime.of(2011, 4, 2, 23, 31, 0, 0, ZoneId.of("Asia/Kolkata"));
+
+      String formatted = DateTimeFormatter.ISO_DATE_TIME.format(indiaWins2011WorldCup);
+      System.out.println("formatted using ISO = " + formatted);
+
+      DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG);
+      formatted = formatter.format(indiaWins2011WorldCup);
+      System.out.println("formatted using Long Localized Style = " + formatted);
+
+      formatted = formatter.withLocale(Locale.UK).format(indiaWins2011WorldCup);
+      System.out.println("formatter with Locale UK = " + formatted);
+      delayBuffer();
+    }
+  }
+
+  private static void default_methods() {}
+
+  private static void file() {}
+
+  private static void http_client() {}
+
+  private static void instance_of() {}
+
+  private static void interfaces() throws Exception {
+    LOGGER.info("Java 8 :: Functional Interfaces");
+    {
+      // A Functional Interface is an interface with a single abstract method
+      String[] words = new String[] {"commerce", "chain", "shame", "clerk", "horse"};
+      Arrays.sort(
+          words,
+          new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+              return Integer.compare(o1.length(), o2.length());
+            }
+          });
+
+      // can be replaced by
+      Arrays.sort(words, (o1, o2) -> Integer.compare(o1.length(), o2.length()));
+    }
+
+    LOGGER.info("Java 8 :: Changes to Interfaces");
+    {
+      // Interfaces can now have concrete implementations called 'default methods'
+      // This was done to safely and passively add new functionality to existing interfaces
+
+      interface SimpleInterface {
+        String getMessage();
+
+        default int getAnswerToLife() {
+          return 42;
+        }
+      }
+
+      class Impl implements SimpleInterface {
+        @Override
+        public String getMessage() {
+          return "Did not need to implement default getAnswerToLife";
+        }
+      }
+
+      Impl impl = new Impl();
+      System.out.println("impl = " + impl.getAnswerToLife());
+
+      class ImplOverrider implements SimpleInterface {
+        @Override
+        public String getMessage() {
+          return "I can override default methods";
+        }
+
+        @Override
+        public int getAnswerToLife() {
+          return 183;
+        }
+      }
+
+      ImplOverrider overrider = new ImplOverrider();
+      System.out.println("overrider = " + overrider.getAnswerToLife());
+
+      // Interfaces can now have static methods too
+      // Overall, Interfaces can now have default & static methods
+
+      delayBuffer();
+    }
+  }
+
+  private static void java9_language_modifications() {}
+
+  private static void lambdas() throws Exception {
+    LOGGER.info(
+        "Java 8 :: The addition of functional programming constructs to its object-oriented root. "
+            + "A “lambda expression” is a block of code that you can pass around so it can be executed "
+            + "later, once or multiple times. You can supply a lambda expression whenever an object of an "
+            + "interface with a single abstract method is expected (functional interface)");
+    delayBuffer();
+
+    LOGGER.info("Java 8 :: Lambda Expression Syntax");
+    {
+      // The arrow operator '->' followed by an 'expression'
+      Comparator<Integer> comparator =
+          (i1, i2) -> {
+            if (i1 > i2) {
+              return 1;
+            } else if (i2 > i1) {
+              return -1;
+            }
+            return 0;
+          };
+      System.out.println("Integer Comparison :: " + comparator.compare(1, 2));
+
+      // creating a thread using lambda expression
+      final Thread A = new Thread(() -> System.out.println("I was printed in SimpleThread::run()"));
+      A.start();
+      A.join();
+
+      delayBuffer();
+    }
+
+    LOGGER.info("Java 8 :: Method References");
+    {
+      // Lambda Expressions can sometimes be swapped with method references
+      String[] words = new String[] {"commerce", "chain", "shame", "clerk", "horse"};
+      System.out.println("words = " + Arrays.toString(words));
+
+      Arrays.sort(words, (o1, o2) -> o1.compareToIgnoreCase(o2));
+      // can be swapped with
+      // we are essentially passing the compareToIgnoreCase method to the sort method
+      Arrays.sort(words, String::compareToIgnoreCase);
+
+      System.out.println("words = " + Arrays.toString(words));
+      // A Lambda expression 'x -> System.out.println(x)' can be simplified as:
+      // 'System.out::println'
+
+      // At the end of the day the reason you'd use Lambdas is to 'defer execution'
+      delayBuffer();
+    }
+  }
+
+  private static void not_predicate() {}
+
+  private static void npe() {}
+
+  private static void number() {}
+
+  private static void optional() {}
+
+  private static void records() {}
+
+  private static void streams() throws Exception {
+    LOGGER.info(
+        "Java 8 :: Streams are abstract constructs used for processing sequence of elements. It allows you to "
             + "perform aggregate operations, use intermediary pipelines, introduce parallelism, etc. "
             + "You can connect streams to each other following principles of the Decorator Pattern");
     delayBuffer();
 
-    LOGGER.info("Creation of Streams");
+    LOGGER.info("Java 8 :: Creation of Streams");
     {
       // Basics
       Stream<String> streamUsingOf = Stream.of("Lorem", "Ipsum");
@@ -251,7 +551,7 @@ public class Explorer {
       delayBuffer();
     }
 
-    LOGGER.info("Iteration -> Stream");
+    LOGGER.info("Java 8 :: Iteration -> Stream");
     {
       final URL resource = Explorer.class.getClassLoader().getResource("lorem_ipsum.txt");
       assert resource != null;
@@ -280,7 +580,7 @@ public class Explorer {
       delayBuffer();
     }
 
-    LOGGER.info("Interesting Operations on Streams");
+    LOGGER.info("Java 8 :: Interesting Operations on Streams");
     {
       // distinct, count
       int[] randomRepeatedNumbers = new int[] {873, 348, 210, 873, 348};
@@ -357,7 +657,7 @@ public class Explorer {
       delayBuffer();
     }
 
-    LOGGER.info("Collectors");
+    LOGGER.info("Java 8 :: Collectors");
     {
       SimpleClass a = new SimpleClass(1, "One");
       SimpleClass b = new SimpleClass(2, "Two");
@@ -385,237 +685,19 @@ public class Explorer {
     }
   }
 
-  private static void java8_lambdas() throws Exception {
-    LOGGER.info(
-        "Java 8 is the addition of functional programming constructs to its object-oriented root. "
-            + "A “lambda expression” is a block of code that you can pass around so it can be executed "
-            + "later, once or multiple times. You can supply a lambda expression whenever an object of an "
-            + "interface with a single abstract method is expected (functional interface)");
-    delayBuffer();
+  private static void string() {}
 
-    LOGGER.info("Syntax");
-    {
-      // The arrow operator '->' followed by an 'expression'
-      Comparator<Integer> comparator =
-          (i1, i2) -> {
-            if (i1 > i2) {
-              return 1;
-            } else if (i2 > i1) {
-              return -1;
-            }
-            return 0;
-          };
-      System.out.println("Integer Comparison :: " + comparator.compare(1, 2));
+  private static void switch_expression() {}
 
-      // creating a thread using lambda expression
-      final Thread A = new Thread(() -> System.out.println("I was printed in SimpleThread::run()"));
-      A.start();
-      A.join();
+  private static void teeing() {}
 
-      delayBuffer();
-    }
+  private static void text_blocks() {}
 
-    LOGGER.info("Functional Interfaces");
-    {
-      // A Functional Interface is an interface with a single abstract method
-      String[] words = new String[] {"commerce", "chain", "shame", "clerk", "horse"};
-      Arrays.sort(
-          words,
-          new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-              return Integer.compare(o1.length(), o2.length());
-            }
-          });
+  private static void var() {}
 
-      // can be replaced by
-      Arrays.sort(words, (o1, o2) -> Integer.compare(o1.length(), o2.length()));
-    }
+  private static void vector() {}
 
-    LOGGER.info("Changes to Interfaces");
-    {
-      // Interfaces can now have concrete implementations called 'default methods'
-      // This was done to safely and passively add new functionality to existing interfaces
-
-      interface SimpleInterface {
-        String getMessage();
-
-        default int getAnswerToLife() {
-          return 42;
-        }
-      }
-
-      class Impl implements SimpleInterface {
-        @Override
-        public String getMessage() {
-          return "Did not need to implement default getAnswerToLife";
-        }
-      }
-
-      Impl impl = new Impl();
-      System.out.println("impl = " + impl.getAnswerToLife());
-
-      class ImplOverrider implements SimpleInterface {
-        @Override
-        public String getMessage() {
-          return "I can override default methods";
-        }
-
-        @Override
-        public int getAnswerToLife() {
-          return 183;
-        }
-      }
-
-      ImplOverrider overrider = new ImplOverrider();
-      System.out.println("overrider = " + overrider.getAnswerToLife());
-
-      // Interfaces can now have static methods too
-      // Overall, Interfaces can now have default & static methods
-
-      delayBuffer();
-    }
-
-    LOGGER.info("Method References");
-    {
-      // Lambda Expressions can sometimes be swapped with method references
-      String[] words = new String[] {"commerce", "chain", "shame", "clerk", "horse"};
-      System.out.println("words = " + Arrays.toString(words));
-
-      Arrays.sort(words, (o1, o2) -> o1.compareToIgnoreCase(o2));
-      // can be swapped with
-      // we are essentially passing the compareToIgnoreCase method to the sort method
-      Arrays.sort(words, String::compareToIgnoreCase);
-
-      System.out.println("words = " + Arrays.toString(words));
-      // A Lambda expression 'x -> System.out.println(x)' can be simplified as:
-      // 'System.out::println'
-
-      // At the end of the day the reason you'd use Lambdas is to 'defer execution'
-      delayBuffer();
-    }
-  }
-
-  private static void java8_date_time() throws Exception {
-    LOGGER.info(
-        "All java.time objects are immutable. "
-            + "An Instant is a point on the time line. "
-            + "A Duration is the difference between two instants. "
-            + "LocalDateTime has no time zone information. "
-            + "ZonedDateTime is a point in time in a given time zone. "
-            + "Other important classes are Temporal Adjuster, Period & DateTimeFormatter. "
-            + "All of these have methods around plus, minus and other common helpers");
-    delayBuffer();
-
-    LOGGER.info("Instant & Duration");
-    {
-      Instant start = Instant.now();
-      Thread.sleep(TimeUnit.SECONDS.toMillis(5L));
-      Instant end = Instant.now();
-
-      Duration timeElapsed = Duration.between(start, end);
-      System.out.println("Elapsed ms :: " + timeElapsed.toMillis());
-
-      Duration shouldBeLessThanOne = timeElapsed.minusSeconds(5);
-
-      System.out.println("shouldBeLessThanOne = " + shouldBeLessThanOne);
-      delayBuffer();
-    }
-
-    LOGGER.info("Local APIs");
-    {
-      LocalDate today = LocalDate.now();
-      System.out.println("today = " + today);
-
-      LocalDate myBirthday = LocalDate.of(1993, 11, 15);
-      System.out.println("myBirthday = " + myBirthday);
-
-      LocalDate myBirthdayUsingMonthEnum = LocalDate.of(1993, Month.NOVEMBER, 15);
-      System.out.println("myBirthdayUsingMonthEnum = " + myBirthdayUsingMonthEnum);
-
-      long age = myBirthday.until(today, ChronoUnit.YEARS);
-      System.out.println("age = " + age);
-
-      LocalTime rightNow = LocalTime.now();
-      System.out.println("rightNow = " + rightNow);
-
-      LocalTime secretTime = LocalTime.of(23, 39);
-      System.out.println("secretTime = " + secretTime);
-
-      LocalTime tenHoursAfterSecret = secretTime.plus(10, ChronoUnit.HOURS);
-      System.out.println("tenHoursAfterSecret = " + tenHoursAfterSecret);
-
-      // compute specific dates, in this example lets see next workday from now
-      TemporalAdjuster NEXT_WORKDAY =
-          w -> {
-            LocalDate result = (LocalDate) w;
-            do {
-              result = result.plusDays(1);
-            } while (result.getDayOfWeek().getValue() >= DayOfWeek.SATURDAY.getValue());
-            return result;
-          };
-      LocalDate backToWork = today.with(NEXT_WORKDAY);
-      System.out.println("backToWork = " + backToWork);
-
-      // finding first Sunday after India won the 1983 World Cup
-      LocalDate firstSundayAfter83Win =
-          LocalDate.of(1983, Month.JUNE, 25).with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
-      System.out.println("firstSundayAfter83Win = " + firstSundayAfter83Win);
-
-      delayBuffer();
-    }
-
-    LOGGER.info("Zoned APIs");
-    {
-      ZonedDateTime indiaWins2011WorldCup =
-          ZonedDateTime.of(2011, 4, 2, 23, 31, 0, 0, ZoneId.of("Asia/Kolkata"));
-      System.out.println("indiaWins2011WorldCup = " + indiaWins2011WorldCup);
-
-      // Use Period when adjusting across time boundaries (takes into account the DST)
-      // Duration won't work with Daylight Savings
-      ZonedDateTime oneWeekLater = indiaWins2011WorldCup.plus(Period.ofDays(7));
-      System.out.println("oneWeekLater = " + oneWeekLater);
-
-      delayBuffer();
-    }
-
-    LOGGER.info("Formatting");
-    {
-      ZonedDateTime indiaWins2011WorldCup =
-          ZonedDateTime.of(2011, 4, 2, 23, 31, 0, 0, ZoneId.of("Asia/Kolkata"));
-
-      String formatted = DateTimeFormatter.ISO_DATE_TIME.format(indiaWins2011WorldCup);
-      System.out.println("formatted using ISO = " + formatted);
-
-      DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG);
-      formatted = formatter.format(indiaWins2011WorldCup);
-      System.out.println("formatted using Long Localized Style = " + formatted);
-
-      formatted = formatter.withLocale(Locale.UK).format(indiaWins2011WorldCup);
-      System.out.println("formatter with Locale UK = " + formatted);
-      delayBuffer();
-    }
-  }
-
-  // =========== Java 9 ============================================================================
-
-  // =========== Java 10 ===========================================================================
-
-  // =========== Java 11 ===========================================================================
-
-  // =========== Java 12 ===========================================================================
-
-  // =========== Java 13 ===========================================================================
-
-  // =========== Java 14 ===========================================================================
-
-  // =========== Java 15 ===========================================================================
-
-  // =========== Java 16 ===========================================================================
-
-  // =========== Java 17 ===========================================================================
-
-  // =========== Utility ===========================================================================
+  // =========== Utility =========================================================================
 
   private static void delayBuffer() throws InterruptedException {
     System.out.println();
