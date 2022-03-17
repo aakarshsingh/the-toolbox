@@ -30,6 +30,7 @@ import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -62,7 +63,6 @@ public class Explorer {
     java10();
     java9();
     java8();
-    System.exit(0);
 
   }
 
@@ -292,6 +292,34 @@ public class Explorer {
 
         System.out.println("nums = " + nums);
         System.out.println("strings = " + strings);
+        delayBuffer();
+      }
+    } else if (java == 10) {
+      LOGGER.info("Java 10 :: Unmodifiable Collections");
+      {
+        List<Integer> nums = List.of(1, 2, 3);
+
+        // unmodifiable copy of the given Collection
+        List<Integer> unmodifiable = List.copyOf(nums);
+        try {
+          unmodifiable.add(4);
+        } catch (final UnsupportedOperationException e) {
+          LOGGER.info("Cannot modify an immutable object. It is an UnsupportedOperation");
+        }
+
+        // Collect a Stream into unmodifiable List, Map or Set
+        List<Integer> evens =
+            nums.stream().filter(i -> i % 2 == 0).collect(Collectors.toUnmodifiableList());
+
+        System.out.println("evenList.size() = " + evens.size());
+        delayBuffer();
+
+        try {
+          evens.add(4);
+        } catch (final UnsupportedOperationException e) {
+          LOGGER.info("Cannot modify an immutable object. It is an UnsupportedOperation");
+        }
+
         delayBuffer();
       }
     }
@@ -620,6 +648,13 @@ public class Explorer {
 
         delayBuffer();
       }
+    } else if (java == 10) {
+      List<Integer> odds = List.of(1, 3, 5);
+      try {
+        odds.stream().filter(i -> i % 2 == 0).findFirst().orElseThrow();
+      } catch (final NoSuchElementException e) {
+        LOGGER.info("Didn't find any value from teh Optional. It is a NoSuchElementException");
+      }
     }
   }
 
@@ -823,7 +858,34 @@ public class Explorer {
 
   private static void text_blocks(final int java) {}
 
-  private static void var(final int java) {}
+  private static void var(final int java) throws Exception {
+    if (java == 10) {
+      LOGGER.info(
+          "Java 10 :: Local Variable Type Interference. Can be used only in the following case:"
+              + "1. Local Variable with initializer\n"
+              + "2. Indexes of enhanced for loop or indexes\n"
+              + "3. Local declared in for loop");
+      {
+        var message = "Hello there! General Kenobi!";
+        System.out.println("message.getClass() = " + message.getClass());
+
+        var didYouKnow = "var is not a keyword for passivity reasons, which means";
+
+        System.out.println(didYouKnow + " var var = \"var\" is valid");
+        var var = "var";
+
+        // More valid ways to use var
+        List<Integer> numbers = List.of(1, 2, 3);
+        for (var number : numbers) {
+          System.out.print(number + " ");
+        }
+        for (var i = 0; i < numbers.size(); i++) {
+          System.out.print(numbers.get(i) + " ");
+        }
+        delayBuffer();
+      }
+    }
+  }
 
   private static void vector(final int java) {}
 
