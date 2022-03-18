@@ -6,8 +6,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.math.BigInteger;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -34,9 +39,11 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -45,6 +52,7 @@ import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.NonNull;
 
 /** This covers features from Java 8 through 17. Focuses on high level ideas and snippets. */
 public class Explorer {
@@ -64,6 +72,7 @@ public class Explorer {
     java9();
     java8();
 
+    System.exit(0);
   }
 
   /**
@@ -139,7 +148,6 @@ public class Explorer {
    *   <li>New File Methods
    *   <li>Collection to an Array
    *   <li>The Not Predicate Method
-   *   <li>Nest Based Access Control
    * </ul>
    */
   private static void java11() throws Exception {
@@ -151,7 +159,6 @@ public class Explorer {
     file(11);
     collections(11);
     not_predicate(11);
-    access_control(11);
 
     // System.exit(0);
   }
@@ -279,8 +286,6 @@ public class Explorer {
   }
 
   // =========== Language Changes=================================================================
-  private static void access_control(final int java) throws Exception {}
-
   private static void classes(final int java) throws Exception {}
 
   private static void collections(final int java) throws Exception {
@@ -322,6 +327,15 @@ public class Explorer {
 
         delayBuffer();
       }
+    } else if (java == 11) {
+        LOGGER.info("Java 11 :: Collection to an Array");
+        {
+            List<String> strings = List.of("one", "two");
+            String[] listToArray = strings.toArray(String[]::new);
+            System.out.println("listToArray.length = " + listToArray.length);
+
+            delayBuffer();
+        }
     }
   }
 
@@ -430,10 +444,45 @@ public class Explorer {
 
   private static void default_methods(final int java) {}
 
-  private static void file(final int java) {}
+  private static void file(final int java) throws Exception {
+    if(java == 11) {
+      LOGGER.info("Java 11 :: Reading & Writing of String to Files");
+      final Path path = Files.writeString(Files.createTempFile("temp", ".txt"), "You are being watched!");
+      System.out.println(Files.readString(path));
+    }
+  }
 
   private static void http_client(final int java) throws Exception {
+      if(java == 11) {
+          LOGGER.info("""
+                  Java 11 :: A new HTTP Client that implements HTTP/2 and WebSocketIt is aimed at replacing the
+                  legacy HttpURLConnection. The new API is feature rich and is fully asynchronous. It improves
+                  performance by using stream multiplexing, header compression, etc. The core classes/interfaces are:
+                  - The HttpClient class, java.net.http.HttpClient
+                  - The HttpRequest class, java.net.http.HttpRequest
+                  - The HttpResponse<T> interface, java.net.http.HttpResponse
+                  - The WebSocket interface, java.net.http.WebSocket""");
+          {
+              HttpClient client = HttpClient.newHttpClient();
 
+              HttpRequest request = HttpRequest.newBuilder(new URI("https://postman-echo.com/get"))
+                              .GET()
+                              .version(HttpClient.Version.HTTP_2)
+                              .timeout(Duration.of(10, ChronoUnit.SECONDS))
+                              .build();
+
+              // sync call
+              HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+              System.out.println("response = " + response.body());
+
+              // async call
+              CompletableFuture<HttpResponse<String>> future = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+              String result = future.thenApply(HttpResponse::body).get(10, TimeUnit.SECONDS);
+              System.out.println("response = " + result);
+
+              delayBuffer();
+          }
+      }
   }
 
   private static void instance_of(final int java) {}
@@ -539,7 +588,7 @@ public class Explorer {
     {
       // try-with-resources
       BufferedReader bufferedReader =
-          new BufferedReader(new FileReader(File.createTempFile("pre", "suf")));
+          new BufferedReader(new FileReader(File.createTempFile("temp", ".txt")));
 
       try (bufferedReader) {
         System.out.println("Can Use Final or Effectively Final in Try with Resources");
@@ -618,7 +667,19 @@ public class Explorer {
     }
   }
 
-  private static void not_predicate(final int java) {}
+  private static void not_predicate(final int java) throws Exception {
+      if(java == 11) {
+          LOGGER.info("Java 11 :: The Not Predicated");
+          {
+              List<String> strings = Arrays.asList(" ", "  ", "Hello");
+              List<String> withoutEmptyStrings = strings.stream()
+                      .filter(Predicate.not(String::isEmpty))
+                      .collect(Collectors.toList());
+              System.out.println("withoutEmptyStrings = " + withoutEmptyStrings);
+              delayBuffer();
+          }
+      }
+  }
 
   private static void npe(final int java) {}
 
@@ -649,6 +710,7 @@ public class Explorer {
         delayBuffer();
       }
     } else if (java == 10) {
+      LOGGER.info("Java 10 :: orElseThrow");
       List<Integer> odds = List.of(1, 3, 5);
       try {
         odds.stream().filter(i -> i % 2 == 0).findFirst().orElseThrow();
@@ -850,7 +912,35 @@ public class Explorer {
     }
   }
 
-  private static void string(final int java) {}
+  private static void string(final int java) throws Exception {
+    if(java == 11) {
+      LOGGER.info(" Java 11 :: New String Methods");
+      {
+        System.out.println("\" \".isBlank() = " + " ".isBlank());
+
+        System.out.println();
+        String multi = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n" +
+                " Vestibulum a tortor at velit semper dapibus.\n" +
+                "Fusce molestie ante diam, non laoreet nisi tempus eu.\n" +
+                "Aliquam vel mi in eros bibendum venenatis sed in nisl.\n" +
+                "Vestibulum sapien lectus, luctus aliquet tincidunt eget, cursus quis sapien.\n";
+        System.out.println("Number of Lines = " + multi.lines().collect(Collectors.toList()).size());
+
+        System.out.println();
+        System.out.println("strip() is unicode aware, trim() wasn't");
+        String random = "         Random        ";
+        System.out.println("random.strip() = " + random.strip());
+        System.out.println("random.stripLeading() = " + random.stripLeading());
+        System.out.println("random.stripTrailing() = " + random.stripTrailing());
+
+        System.out.println();
+        String magic = "magic".repeat(5);
+        System.out.println("magic x5 = " + magic);
+
+        delayBuffer();
+      }
+    }
+  }
 
   private static void switch_expression(final int java) {}
 
@@ -884,6 +974,18 @@ public class Explorer {
         }
         delayBuffer();
       }
+    } else if(java == 11) {
+        LOGGER.info("Java 11 :: Local-Variable Syntax for Lambda Params. " +
+                "This allows us to use modifiers on local variables. Such as NonNull, etc.");
+        {
+            List<String> strings = Arrays.asList("one", "two");
+            String result = strings.stream()
+                    .map((@NonNull var x) -> x.toLowerCase())
+                    .collect(Collectors.joining(", "));
+            System.out.println("result = " + result);
+        }
+
+        delayBuffer();
     }
   }
 
