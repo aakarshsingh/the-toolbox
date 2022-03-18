@@ -14,6 +14,7 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLOutput;
 import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -49,6 +50,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import javax.swing.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -498,7 +501,27 @@ public class Explorer {
       }
   }
 
-  private static void instance_of(final int java) {}
+  private static void instance_of(final int java) throws Exception {
+    if(java == 14) {
+      LOGGER.info("Java 14 :: Pattern Matching for instanceOf");
+      {
+        Object javaVersion = "Java 14";
+
+        // before java 14
+        if (javaVersion instanceof String) {
+          String str = (String) javaVersion;
+          str.strip();
+        }
+
+        // now
+        if (javaVersion instanceof String s) {
+          s.strip();
+        }
+
+        delayBuffer();
+      }
+    }
+  }
 
   private static void interfaces(final int java) throws Exception {
     if (java == 8) {
@@ -694,7 +717,19 @@ public class Explorer {
       }
   }
 
-  private static void npe(final int java) {}
+  private static void npe(final int java) throws Exception {
+    if(java == 14) {
+      LOGGER.info("Java 14 :: Improved NPEs");
+      {
+        int[] arr = null;
+        try {
+          arr[0] = 1;
+        } catch (final NullPointerException e) {
+          LOGGER.info(e.getMessage());
+        }
+      }
+    }
+  }
 
   private static void number(final int java) throws Exception{
     if(java == 12) {
@@ -745,7 +780,20 @@ public class Explorer {
     }
   }
 
-  private static void records(final int java) {}
+  private static void records(final int java) throws Exception {
+    if(java == 14) {
+      LOGGER.info("Java 14 :: Records were introduced to reduce repetitive boilerplate code in data model POJOs");
+
+      record Java(String version, LocalDate releaseDate) { };
+
+      Java java1 = new Java("JDK 1.0 (Oak)", LocalDate.of(1996, 1, 23));
+
+      System.out.println("java1.version = " + java1.version);
+      System.out.println("java1.releaseDate = " + java1.releaseDate);
+
+      delayBuffer();
+    }
+  }
 
   private static void streams(final int java) throws Exception {
     if (java == 8) {
