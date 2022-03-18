@@ -14,7 +14,6 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.SQLOutput;
 import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -50,8 +49,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import javax.swing.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -208,7 +205,6 @@ public class Explorer {
    *
    * <ul>
    *   <li>Records
-   *   <li>Pattern Matching for instanceof
    *   <li>Helpful NullPointerExceptions
    * </ul>
    */
@@ -216,7 +212,6 @@ public class Explorer {
     // Features added in Java 14
 
     records(14);
-    instance_of(14);
     npe(14);
 
     // System.exit(0);
@@ -227,16 +222,12 @@ public class Explorer {
    *
    * <ul>
    *   <li>Text Blocks
-   *   <li>Sealed Classes
-   *   <li>Hidden Classes
-   *   <li>Pattern Matching Type Checks
    * </ul>
    */
   private static void java15() throws Exception {
     // Features added in Java 15
 
     text_blocks(15);
-    classes(15);
 
     // System.exit(0);
   }
@@ -245,25 +236,19 @@ public class Explorer {
    * Features added in Java 16:
    *
    * <ul>
-   *   <li>Invoke Default Methods From Proxy Instances
    *   <li>Day Period Support
    *   <li>Add Stream.toList Method
-   *   <li>Vector API Incubator
    *   <li>Records
    *   <li>Pattern Matching for instanceof
-   *   <li>Sealed Classes
    * </ul>
    */
   private static void java16() throws Exception {
     // Features added in Java 16
 
-    default_methods(16);
     date_time(16);
     streams(16);
-    vector(16);
     records(16);
     instance_of(16);
-    classes(16);
 
     // System.exit(0);
   }
@@ -275,7 +260,6 @@ public class Explorer {
    *   <li>Enhanced Pseudo-Random Number Generators
    *   <li>Sealed Classes
    *   <li>Pattern Matching for Switch
-   *   <li>Vector API
    * </ul>
    */
   private static void java17() throws Exception {
@@ -284,13 +268,20 @@ public class Explorer {
     number(17);
     classes(17);
     switch_expression(17);
-    vector(17);
 
     // System.exit(0);
   }
 
   // =========== Language Changes=================================================================
-  private static void classes(final int java) throws Exception {}
+  private static void classes(final int java) throws Exception {
+    if(java == 16) {
+      LOGGER.info("Java 16 :: Sealed Classes");
+      {
+
+        delayBuffer();
+      }
+    }
+  }
 
   private static void collections(final int java) throws Exception {
     if (java == 9) {
@@ -443,10 +434,18 @@ public class Explorer {
         System.out.println("formatter with Locale UK = " + formatted);
         delayBuffer();
       }
+    } else if (java == 16) {
+      LOGGER.info("Java 16 :: Day Period Support. Addition of new symbol 'B'");
+      {
+        LocalTime date = LocalTime.parse("10:21:13");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h B");
+        System.out.println("date.format(formatter) = " + date.format(formatter));
+
+        delayBuffer();
+      }
     }
   }
-
-  private static void default_methods(final int java) {}
 
   private static void file(final int java) throws Exception {
     if(java == 11) {
@@ -502,10 +501,10 @@ public class Explorer {
   }
 
   private static void instance_of(final int java) throws Exception {
-    if(java == 14) {
-      LOGGER.info("Java 14 :: Pattern Matching for instanceOf");
+    if(java == 16) {
+      LOGGER.info("Java 16 :: Pattern Matching for instanceOf");
       {
-        Object javaVersion = "Java 14";
+        Object javaVersion = "Java 16";
 
         // before java 14
         if (javaVersion instanceof String) {
@@ -784,7 +783,13 @@ public class Explorer {
     if(java == 14) {
       LOGGER.info("Java 14 :: Records were introduced to reduce repetitive boilerplate code in data model POJOs");
 
-      record Java(String version, LocalDate releaseDate) { };
+      record Java(String version, LocalDate releaseDate) {
+        public Java {
+          if(releaseDate.isBefore(LocalDate.of(1996, 1, 23))) {
+            throw new IllegalArgumentException("Java was first release on 23rd Jan '96");
+          }
+        }
+      };
 
       Java java1 = new Java("JDK 1.0 (Oak)", LocalDate.of(1996, 1, 23));
 
@@ -792,6 +797,20 @@ public class Explorer {
       System.out.println("java1.releaseDate = " + java1.releaseDate);
 
       delayBuffer();
+    } else if (java == 16) {
+      LOGGER.info("Java 16 :: Incremental Changes to Records");
+      {
+        record Java(String version, LocalDate releaseDate) {}
+
+        // defining records as class members of inner classes wasn't possible earlier
+        class Outer {
+           class Inner {
+            Java java2 = new Java("J2SE 1.2 (Playground)", LocalDate.of(1998, 12, 13));
+          }
+        }
+
+        delayBuffer();
+      }
     }
   }
 
@@ -982,6 +1001,16 @@ public class Explorer {
 
         delayBuffer();
       }
+    } else if(java == 16) {
+      LOGGER.info("Java 16 :: Stream.toList alternate to Collectors");
+      {
+        List<String> strings = List.of("one", "two", "three");
+        List<String> usingToList = strings.stream().map(s -> s.substring(1)).toList();
+
+        System.out.println("usingToList = " + usingToList);
+
+        delayBuffer();
+      }
     }
   }
 
@@ -1082,7 +1111,30 @@ public class Explorer {
     }
   }
 
-  private static void text_blocks(final int java) {}
+  private static void text_blocks(final int java) throws Exception{
+    if(java == 15) {
+      LOGGER.info("Java 15 :: Text Blocks brings multi-line string support without line breaks");
+      {
+        String beforeJava15 = "<html>\n" +
+                "   <body>\n" +
+                "      <p>Hello, World</p>\n" +
+                "   </body>\n" +
+                "</html>\n";
+
+        String java15 = """
+                  <html>
+                      <body>
+                          <p>Hello, World</p>
+                      </body>
+                  </html>
+                  """;
+
+        System.out.println("java15 text blocks = " + java15);
+
+        delayBuffer();
+      }
+    }
+  }
 
   private static void var(final int java) throws Exception {
     if (java == 10) {
@@ -1124,9 +1176,6 @@ public class Explorer {
         delayBuffer();
     }
   }
-
-  private static void vector(final int java) {}
-
   // =========== Utility =========================================================================
 
   private static void delayBuffer() throws InterruptedException {
