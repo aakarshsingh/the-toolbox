@@ -976,7 +976,45 @@ public class Explorer {
     }
   }
 
-  private static void switch_expression(final int java) {}
+  private static void switch_expression(final int java) throws Exception{
+    if(java == 13){
+      LOGGER.info("Java 13 :: Switch Expressions");
+      {
+        String day = "FRIDAY";
+
+        // Old Style
+        boolean isTodayHoliday;
+        switch (day) {
+          case "MONDAY":
+          case "TUESDAY":
+          case "WEDNESDAY":
+          case "THURSDAY":
+          case "FRIDAY":
+            isTodayHoliday = false;
+            break;
+          case "SATURDAY":
+          case "SUNDAY":
+            isTodayHoliday = true;
+            break;
+          default:
+            System.out.println("I don't know this day=" + day);
+
+         // new style with ->, break goes away, fall-through goes away
+         isTodayHoliday = switch (day) {
+           case "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY" -> false;
+           case "SATURDAY", "SUNDAY" -> true;
+           default -> throw new IllegalArgumentException("I don't know this day=" + day);
+         };
+
+         System.out.println("isTodayHoliday = " + isTodayHoliday);
+
+         // There is also the yield keyword which can be used instead of break for returning values
+
+         delayBuffer();
+        }
+      }
+    }
+  }
 
   private static void teeing(final int java) throws Exception {
     if(java == 12) {
