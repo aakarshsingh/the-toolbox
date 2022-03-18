@@ -46,6 +46,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.random.RandomGeneratorFactory;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -259,7 +260,6 @@ public class Explorer {
    * <ul>
    *   <li>Enhanced Pseudo-Random Number Generators
    *   <li>Sealed Classes
-   *   <li>Pattern Matching for Switch
    * </ul>
    */
   private static void java17() throws Exception {
@@ -267,16 +267,92 @@ public class Explorer {
 
     number(17);
     classes(17);
-    switch_expression(17);
 
     // System.exit(0);
   }
 
   // =========== Language Changes=================================================================
   private static void classes(final int java) throws Exception {
-    if(java == 16) {
-      LOGGER.info("Java 16 :: Sealed Classes");
+    if(java == 17) {
+      LOGGER.info("""
+              Java 17 :: Sealed Classes. Rules:
+              - All permitted subclasses must belong to the same module as the sealed class.
+              - Every permitted subclass must explicitly extend the sealed class.
+              - Every permitted subclass must define a modifier: final, sealed, or non-sealed.""");
       {
+        System.out.println("Valid Example :: ");
+        System.out.println("To seal an interface, we can apply the sealed modifier to its declaration. " +
+                "The permits clause then specifies the classes that are permitted to implement the sealed interface:");
+        System.out.println("""
+                public sealed interface Service permits Car, Truck {
+                
+                    int getMaxServiceIntervalInMonths();
+                
+                    default int getMaxDistanceBetweenServicesInKilometers() {
+                        return 100000;
+                    }
+                
+                }
+                """);
+        System.out.println();
+        System.out.println("Similar to interfaces, we can seal classes by applying the same sealed modifier. " +
+                "The permits clause should be defined after any extends or implements clause");
+        System.out.println("""
+                public abstract sealed class Vehicle permits Car, Truck {
+                
+                    protected final String registrationNumber;
+                
+                    public Vehicle(String registrationNumber) {
+                        this.registrationNumber = registrationNumber;
+                    }
+                
+                    public String getRegistrationNumber() {
+                        return registrationNumber;
+                    }
+                
+                }
+                """);
+        System.out.println();
+        System.out.println("A permitted subclass must define a modifier. " +
+                "It may be declared final to prevent any further extensions:");
+        System.out.println("""
+                public final class Truck extends Vehicle implements Service {
+                
+                    private final int loadCapacity;
+                
+                    public Truck(int loadCapacity, String registrationNumber) {
+                        super(registrationNumber);
+                        this.loadCapacity = loadCapacity;
+                    }
+                
+                    public int getLoadCapacity() {
+                        return loadCapacity;
+                    }
+                
+                    @Override
+                    public int getMaxServiceIntervalInMonths() {
+                        return 18;
+                    }
+                
+                }
+                """);
+        System.out.println();
+        System.out.println("Sealed classes work very well with records. Since records are implicitly final, " +
+                "the sealed hierarchy is even more concise.");
+        System.out.println("""
+                public record Car(int numberOfSeats, String registrationNumber) implements Vehicle {
+                
+                    @Override
+                    public String getRegistrationNumber() {
+                        return registrationNumber;
+                    }
+                
+                    public int getNumberOfSeats() {
+                        return numberOfSeats;
+                    }
+                
+                }
+                """);
 
         delayBuffer();
       }
@@ -738,6 +814,25 @@ public class Explorer {
         longFormat.setMaximumFractionDigits(2);
 
         System.out.println("shortFormat = " + longFormat.format(1313));
+
+        delayBuffer();
+      }
+    } else if (java == 17) {
+      LOGGER.info("Java 17 :: Pseudo-Random Number Generators");
+      {
+
+        System.out.println("All possible Generator IMPLs:");
+
+        RandomGeneratorFactory.all()
+                .map(fac -> fac.group()+ " : " +fac.name())
+                .sorted()
+                .forEach(System.out::println);
+
+        System.out.println();
+
+        RandomGeneratorFactory.of("Xoshiro256PlusPlus").create()
+                .ints(5, 0, 100)
+                .forEach(System.out::println);
 
         delayBuffer();
       }
