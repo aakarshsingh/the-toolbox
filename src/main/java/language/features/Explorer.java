@@ -14,6 +14,7 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.Instant;
@@ -449,6 +450,18 @@ public class Explorer {
       LOGGER.info("Java 11 :: Reading & Writing of String to Files");
       final Path path = Files.writeString(Files.createTempFile("temp", ".txt"), "You are being watched!");
       System.out.println(Files.readString(path));
+    } else if(java == 12) {
+      LOGGER.info("Java 12 :: File Mismatch - used to find the position of first mismatched byte");
+
+      Path tempF1 = Files.createTempFile("f1", ".txt");
+      Path tempF2 = Files.createTempFile("f2", ".txt");
+
+      Files.writeString(tempF1, "Hello World!");
+      Files.writeString(tempF2, "Hello General!");
+
+      System.out.println("Files.mismatch = "+Files.mismatch(tempF1, tempF2));
+
+      delayBuffer();
     }
   }
 
@@ -683,7 +696,19 @@ public class Explorer {
 
   private static void npe(final int java) {}
 
-  private static void number(final int java) {}
+  private static void number(final int java) throws Exception{
+    if(java == 12) {
+      LOGGER.info("Java 12 :: Compact Number Formatting");
+      {
+        NumberFormat longFormat = NumberFormat.getCompactNumberInstance(new Locale("en", "US"), NumberFormat.Style.LONG);
+        longFormat.setMaximumFractionDigits(2);
+
+        System.out.println("shortFormat = " + longFormat.format(1313));
+
+        delayBuffer();
+      }
+    }
+  }
 
   private static void optional(final int java) throws Exception {
     if (java == 9) {
@@ -939,12 +964,37 @@ public class Explorer {
 
         delayBuffer();
       }
+    } else if(java == 12) {
+      LOGGER.info(" Java 11 :: New String Methods");
+      {
+        String s = "Hello World!\nThis is Java 12.";
+        s = s.indent(7);
+        System.out.println("with 7 ident = " + s);
+
+        delayBuffer();
+      }
     }
   }
 
   private static void switch_expression(final int java) {}
 
-  private static void teeing(final int java) {}
+  private static void teeing(final int java) throws Exception {
+    if(java == 12) {
+      LOGGER.info("Java 12 :: Teeing Collector - It is a composite of two downstream collectors. " +
+              "Every element is processed by both downstream collectors. Then their results are passed to the merge " +
+              "function and transformed into the final result.");
+      {
+        double means = Stream.of(1, 2, 3, 5, 7, 11)
+                             .collect(Collectors.teeing(
+                                     Collectors.summingDouble(i -> i), //downstream 1
+                                     Collectors.counting(), //downstream 2
+                                     (sum, count) -> sum / count)); //merge function
+
+        System.out.println("means = " + means);
+        delayBuffer();
+      }
+    }
+  }
 
   private static void text_blocks(final int java) {}
 
