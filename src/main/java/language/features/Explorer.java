@@ -63,6 +63,13 @@ public class Explorer {
 
   public static void main(String[] args) throws Exception {
 
+    java21();
+
+    System.exit(0);
+
+    java20();
+    java19();
+    java18();
     java17();
     java16();
     java15();
@@ -74,7 +81,6 @@ public class Explorer {
     java9();
     java8();
 
-    System.exit(0);
   }
 
   /**
@@ -271,6 +277,95 @@ public class Explorer {
     // System.exit(0);
   }
 
+  /**
+   * Features added in Java 18:
+   *
+   * <ul>
+   *   <li>Simple Web Server
+   *   <li>Code Snippets in Java API Documentation
+   *   <li>UTF-8 by Default
+   *   <li>Pattern Matching for switch (Second Preview)
+   *   <li>Internet-Address Resolution SPI
+   * </ul>
+   */
+  private static void java18() throws Exception {
+    // Features added in Java 18
+
+    switch_expression(18);
+    string(18);
+    simple_web_server(18);
+
+    // System.exit(0);
+  }
+
+  /**
+   * Features added in Java 19:
+   *
+   * <ul>
+   *   <li>Record Patterns (Preview)
+   *   <li>Virtual Threads (Preview)
+   *   <li>Structured Concurrency (Preview)
+   *   <li>Pattern Matching for Switch (Third Preview)
+   *   <li>Vector API (Fourth Incubator)
+   * </ul>
+   */
+  private static void java19() throws Exception {
+    // Features added in Java 19
+
+    records(19);
+    virtual_threads(19);
+    structured_concurrency(19);
+
+    // System.exit(0);
+  }
+
+  /**
+   * Features added in Java 20:
+   *
+   * <ul>
+   *   <li>Record Patterns (Second Preview)
+   *   <li>Pattern Matching for Switch (Fourth Preview)
+   *   <li>Scoped Values (Preview)
+   *   <li>Virtual Threads (Second Preview)
+   *   <li>Structured Concurrency (Second Preview)
+   * </ul>
+   */
+  private static void java20() throws Exception {
+    // Features added in Java 20
+
+    records(20);
+    virtual_threads(20);
+    scoped_values(20);
+
+    // System.exit(0);
+  }
+
+  /**
+   * Features added in Java 21 (LTS):
+   *
+   * <ul>
+   *   <li>String Templates (Preview)
+   *   <li>Sequenced Collections
+   *   <li>Record Patterns (Standard)
+   *   <li>Pattern Matching for Switch (Standard)
+   *   <li>Virtual Threads (Standard)
+   *   <li>Scoped Values (Preview)
+   *   <li>Unnamed Patterns and Variables (Preview)
+   * </ul>
+   */
+  private static void java21() throws Exception {
+    // Features added in Java 21
+
+    string(21);
+    collections(21);
+    records(21);
+    switch_expression(21);
+    virtual_threads(21);
+    unnamed_patterns(21);
+
+    // System.exit(0);
+  }
+
   // =========== Language Changes=================================================================
   private static void classes(final int java) throws Exception {
     if(java == 17) {
@@ -407,6 +502,35 @@ public class Explorer {
 
             delayBuffer();
         }
+    } else if (java == 21) {
+      LOGGER.info("Java 21 :: Sequenced Collections");
+      {
+        System.out.println("""
+                Java 21 introduced new interfaces for collections that have a well-defined encounter order:
+                - SequencedCollection
+                - SequencedSet
+                - SequencedMap
+                
+                These interfaces add methods like:
+                - getFirst()/getLast()
+                - addFirst()/addLast()
+                - removeFirst()/removeLast()
+                - reversed()
+                
+                Example:
+                List<String> list = new ArrayList<>();
+                list.addLast("end");
+                list.addFirst("start");
+                
+                String first = list.getFirst();  // "start"
+                String last = list.getLast();    // "end"
+                
+                // Get reversed view
+                List<String> reversed = list.reversed();
+                """);
+        
+        delayBuffer();
+      }
     }
   }
 
@@ -729,7 +853,7 @@ public class Explorer {
     if (java == 8) {
       LOGGER.info(
           "Java 8 :: The addition of functional programming constructs to its object-oriented root. "
-              + "A “lambda expression” is a block of code that you can pass around so it can be executed "
+              + "A lambda expression is a block of code that you can pass around so it can be executed "
               + "later, once or multiple times. You can supply a lambda expression whenever an object of an "
               + "interface with a single abstract method is expected (functional interface)");
       delayBuffer();
@@ -904,6 +1028,75 @@ public class Explorer {
           }
         }
 
+        delayBuffer();
+      }
+    } else if (java == 19) {
+      LOGGER.info("Java 19 :: Record Patterns (Preview)");
+      {
+        System.out.println("""
+                Record Patterns were introduced as a preview feature in Java 19.
+                They allow for destructuring record values in pattern matching contexts.
+                
+                To use this feature, you needed to enable preview features:
+                javac --enable-preview --source 19 ...
+                java --enable-preview ...
+                
+                Example (when preview enabled):
+                record Point(int x, int y) {}
+                record Rectangle(Point upperLeft, Point lowerRight) {}
+                
+                // Pattern matching in if statement
+                if (obj instanceof Rectangle(Point(int x1, int y1), Point(int x2, int y2))) {
+                    int width = x2 - x1;
+                    int height = y2 - y1;
+                }
+                """);
+        
+        delayBuffer();
+      }
+    } else if (java == 20) {
+      LOGGER.info("Java 20 :: Record Patterns (Second Preview)");
+      {
+        System.out.println("""
+                Record Patterns continued as a preview feature in Java 20 with some refinements.
+                The main enhancement was better support for type inference and generic records.
+                
+                Example (when preview enabled):
+                record Box<T>(T value) {}
+                
+                if (obj instanceof Box(String s)) {  // Type inference for generic record pattern
+                    System.out.println(s.toLowerCase());
+                }
+                """);
+        
+        delayBuffer();
+      }
+    } else if (java == 21) {
+      LOGGER.info("Java 21 :: Record Patterns (Standard)");
+      {
+        System.out.println("""
+                Record Patterns became a standard feature in Java 21 after being previewed in Java 19-20.
+                They allow for powerful pattern matching and destructuring of record values.
+                
+                Example:
+                record Point(int x, int y) {}
+                record Rectangle(Point upperLeft, Point lowerRight) {}
+                
+                // Pattern matching in if statement
+                if (obj instanceof Rectangle(Point(var x1, var y1), Point(var x2, var y2))) {
+                    int width = x2 - x1;
+                    int height = y2 - y1;
+                }
+                
+                // Pattern matching in switch
+                return switch (obj) {
+                    case Rectangle(Point(var x1, var y1), Point(var x2, var y2))
+                        when x1 < x2 && y1 < y2 -> "Valid rectangle";
+                    case Rectangle r -> "Invalid rectangle: " + r;
+                    default -> "Not a rectangle";
+                };
+                """);
+        
         delayBuffer();
       }
     }
@@ -1145,11 +1338,75 @@ public class Explorer {
 
         delayBuffer();
       }
+    } else if(java == 18) {
+      LOGGER.info("Java 18 :: UTF-8 by Default");
+      {
+        System.out.println("""
+                Java 18 makes UTF-8 the default charset for APIs that previously used the platform's default charset.
+                This means that file.encoding system property now defaults to UTF-8 on all platforms.
+                
+                Benefits:
+                - Consistent behavior across all platforms
+                - Better handling of international text
+                - Reduced encoding/decoding issues
+                - Improved portability of applications
+                
+                Example APIs affected:
+                - new String(byte[] bytes)
+                - String.getBytes()
+                - new FileReader(File file)
+                - new FileWriter(File file)
+                - new InputStreamReader(InputStream in)
+                - new OutputStreamWriter(OutputStream out)
+                - Formatter
+                - Scanner
+                """);
+        
+        // Example showing UTF-8 is now default
+        String text = "Hello, 世界!";  // Contains both ASCII and Unicode characters
+        byte[] bytes = text.getBytes(); // No charset specified, uses UTF-8
+        String decoded = new String(bytes); // No charset specified, uses UTF-8
+        System.out.println("Original: " + text);
+        System.out.println("Decoded: " + decoded);
+        System.out.println("Are equal: " + text.equals(decoded));
+        
+        delayBuffer();
+      }
     }
+    // } else if(java == 21) {
+    //   LOGGER.info("Java 21 :: String Templates (Preview)");
+    //   {
+    //     System.out.println("""
+    //             String Templates were introduced as a preview feature in Java 21.
+    //             They provide a more readable way to embed expressions inside string literals.
+    //             Example (when preview enabled):
+    //             String name = "world";
+    //             String message = STR."Hello {name}!";
+    //       """);
+                
+    //             // Multi-line with expressions
+    //             int x = 10, y = 20;
+    //             String result = STR.\"\"\"
+    //                 The sum of \{x} and \{y}
+    //                 is \{x + y}
+    //                 \"\"\";
+                
+    //             // Raw string template
+    //             String json = RAW.\"\"\"
+    //                 {
+    //                     "name": "\{name}",
+    //                     "value": \{x + y}
+    //                 }
+    //                 \"\"\";
+    //             """);
+        
+    //     delayBuffer();
+    //   }
+    // }
   }
 
-  private static void switch_expression(final int java) throws Exception{
-    if(java == 13){
+  private static void switch_expression(final int java) throws Exception {
+    if(java == 13) {
       LOGGER.info("Java 13 :: Switch Expressions");
       {
         String day = "FRIDAY";
@@ -1170,20 +1427,73 @@ public class Explorer {
             break;
           default:
             System.out.println("I don't know this day=" + day);
-
-         // new style with ->, break goes away, fall-through goes away
-         isTodayHoliday = switch (day) {
-           case "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY" -> false;
-           case "SATURDAY", "SUNDAY" -> true;
-           default -> throw new IllegalArgumentException("I don't know this day=" + day);
-         };
-
-         System.out.println("isTodayHoliday = " + isTodayHoliday);
-
-         // There is also the yield keyword which can be used instead of break for returning values
-
-         delayBuffer();
         }
+
+        // new style with ->, break goes away, fall-through goes away
+        isTodayHoliday = switch (day) {
+          case "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY" -> false;
+          case "SATURDAY", "SUNDAY" -> true;
+          default -> throw new IllegalArgumentException("I don't know this day=" + day);
+        };
+
+        System.out.println("isTodayHoliday = " + isTodayHoliday);
+
+        delayBuffer();
+      }
+    } else if(java == 18) {
+      LOGGER.info("Java 18 :: Pattern Matching for Switch (Second Preview)");
+      {
+        System.out.println("""
+                Pattern Matching for switch was available as a preview feature in Java 18.
+                To use this feature, you needed to enable preview features:
+                
+                javac --enable-preview --source 18 ...
+                java --enable-preview ...
+                
+                The feature allows you to use patterns in case labels, making switch
+                more powerful for object-oriented pattern matching:
+                
+                Example (when preview enabled):
+                switch (obj) {
+                    case String s -> s.toLowerCase();
+                    case Integer i -> String.valueOf(i.doubleValue());
+                    case null -> "null";
+                    default -> obj.toString();
+                }
+                
+                This feature became standard in Java 21.
+                """);
+        
+        delayBuffer();
+      }
+    } else if(java == 21) {
+      LOGGER.info("Java 21 :: Pattern Matching for Switch (Standard)");
+      {
+        System.out.println("""
+                Pattern Matching for switch became a standard feature in Java 21.
+                It allows for powerful pattern matching in switch expressions and statements.
+                
+                Example:
+                Object obj = // ...
+                String formatted = switch (obj) {
+                    case String s -> s.toLowerCase();
+                    case Integer i -> String.valueOf(i.doubleValue());
+                    case Long l -> String.format("Long: %d", l);
+                    case null -> "null";
+                    default -> obj.toString();
+                };
+                
+                // With guards
+                int result = switch (obj) {
+                    case String s when s.length() > 5 -> s.length();
+                    case String s -> -1;
+                    case Integer i when i > 0 -> i;
+                    case Integer i -> -i;
+                    default -> 0;
+                };
+                """);
+        
+        delayBuffer();
       }
     }
   }
@@ -1271,6 +1581,200 @@ public class Explorer {
         delayBuffer();
     }
   }
+
+  private static void simple_web_server(final int java) throws Exception {
+    if(java == 18) {
+      LOGGER.info("Java 18 :: Simple Web Server - A command-line tool to start a minimal web server that serves static files");
+      {
+        System.out.println("""
+                The Simple Web Server can be started using the 'jwebserver' command:
+                $ jwebserver
+                listening on port 8000
+                
+                Some useful flags:
+                -p <port>        // Set port number
+                -d <directory>   // Set root directory
+                -o <output>      // Set output format
+                -b <bind>        // Set bind address
+                -h, --help       // Show help message
+                
+                This feature provides an easy way to serve static files during development
+                or for simple file-sharing scenarios.
+                """);
+        
+        delayBuffer();
+      }
+    }
+  }
+
+  private static void virtual_threads(final int java) throws Exception {
+    if(java == 19) {
+      LOGGER.info("Java 19 :: Virtual Threads (Preview)");
+      {
+        System.out.println("""
+                Virtual Threads were introduced as a preview feature in Java 19.
+                They are lightweight threads that dramatically reduce the effort
+                of writing, maintaining, and observing high-throughput concurrent applications.
+                
+                Example (when preview enabled):
+                // Creating a virtual thread
+                Thread.startVirtualThread(() -> {
+                    System.out.println("Running in virtual thread");
+                });
+                
+                // Using virtual thread factory
+                try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+                    IntStream.range(0, 10_000).forEach(i -> {
+                        executor.submit(() -> {
+                            Thread.sleep(Duration.ofSeconds(1));
+                            return i;
+                        });
+                    });
+                }
+                """);
+        
+        delayBuffer();
+      }
+    } else if(java == 20) {
+      LOGGER.info("Java 20 :: Virtual Threads (Second Preview)");
+      {
+        System.out.println("""
+                Virtual Threads continued as a preview feature in Java 20 with refinements.
+                The API was stabilized and performance improvements were made.
+                
+                Key benefits of virtual threads:
+                - Dramatically improve application throughput
+                - Simplify concurrent programming
+                - Enable writing server applications in a simple thread-per-request style
+                - Scale with near-zero overhead
+                
+                They are particularly useful for:
+                - Server applications
+                - Request handling
+                - Task coordination
+                """);
+        
+        delayBuffer();
+      }
+    } else if(java == 21) {
+      LOGGER.info("Java 21 :: Virtual Threads (Standard)");
+      {
+        System.out.println("""
+                Virtual Threads became a standard feature in Java 21.
+                They are lightweight threads that make it practical to represent
+                each task or unit of work with a dedicated thread.
+                
+                Example:
+                // Creating a virtual thread
+                Thread vThread = Thread.ofVirtual().start(() -> {
+                    System.out.println("Running in virtual thread");
+                });
+                
+                // Using virtual thread factory
+                try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+                    IntStream.range(0, 10_000).forEach(i -> {
+                        executor.submit(() -> {
+                            // Each task gets its own virtual thread
+                            processRequest(i);
+                            return i;
+                        });
+                    });
+                }
+                
+                Key features now standard:
+                - Lightweight thread implementation
+                - Automatic thread pool management
+                - Improved debugging and profiling
+                - Better integration with existing threading APIs
+                - Enhanced monitoring capabilities
+                """);
+        
+        delayBuffer();
+      }
+    }
+  }
+
+  private static void structured_concurrency(final int java) throws Exception {
+    if(java == 19) {
+      LOGGER.info("Java 19 :: Structured Concurrency (Preview)");
+      {
+        System.out.println("""
+                Structured Concurrency was introduced as a preview feature in Java 19.
+                It simplifies multithreaded programming by treating multiple tasks
+                running in different threads as a single unit of work.
+                
+                Example (when preview enabled):
+                try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+                    Future<String> user = scope.fork(() -> findUser());
+                    Future<Integer> order = scope.fork(() -> fetchOrder());
+                    
+                    scope.join();           // Wait for both forks
+                    scope.throwIfFailed();  // ... and propagate errors
+                    
+                    // Here, both forks have succeeded
+                    processOrder(user.resultNow(), order.resultNow());
+                }
+                """);
+        
+        delayBuffer();
+      }
+    }
+  }
+
+  private static void scoped_values(final int java) throws Exception {
+    if(java == 20) {
+      LOGGER.info("Java 20 :: Scoped Values (Preview)");
+      {
+        System.out.println("""
+                Scoped Values were introduced as a preview feature in Java 20.
+                They provide a way to share immutable data within and across threads,
+                offering a safer alternative to ThreadLocal.
+                
+                Key benefits:
+                - Immutable by design
+                - Bound to a specific scope
+                - Automatically cleaned up
+                - Thread-safe
+                
+                Example (when preview enabled):
+                final ScopedValue<String> TRANSACTION_ID = ScopedValue.newInstance();
+                
+                void processRequest() {
+                    ScopedValue.where(TRANSACTION_ID, generateTransactionId())
+                        .run(() -> {
+                            // Code here can access TRANSACTION_ID
+                            String id = TRANSACTION_ID.get();
+                            // Value is available even in child threads
+                            processSubTask();
+                        });
+                    // Value is not available here
+                }
+                """);
+        
+        delayBuffer();
+      }
+    }
+  }
+
+  private static void unnamed_patterns(final int java) throws Exception {
+    if(java == 21) {
+      LOGGER.info("Java 21 :: Unnamed Patterns and Variables (Preview)");
+      {
+        System.out.println("""
+                Unnamed Patterns and Variables were introduced as a preview feature in Java 21.
+                They allow for the use of unnamed patterns and variables in pattern matching contexts.
+                
+                Example (when preview enabled):
+                if (obj instanceof String s) {
+                    System.out.println("It's a string: " + s);
+                }
+                """);
+        
+        delayBuffer();
+      }
+    }
+  }
+
   // =========== Utility =========================================================================
 
   private static void delayBuffer() throws InterruptedException {
