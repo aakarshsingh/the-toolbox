@@ -64,9 +64,6 @@ public class Explorer {
   public static void main(String[] args) throws Exception {
 
     java21();
-
-    System.exit(0);
-
     java20();
     java19();
     java18();
