@@ -105,6 +105,129 @@ A personal, educational Java toolbox and scratchpad for exploring the evolution 
 
 ---
 
+## Feature Evolution Paths
+
+### Streams Evolution (Java 8 → 23)
+| Java Version | Streams Feature Added/Changed |
+|--------------|------------------------------|
+| 8            | Streams API introduced: map, filter, reduce, parallel streams, collectors |
+| 9            | `dropWhile`, `takeWhile`, `iterate` with predicate, `Optional.stream()` |
+| 10           | `Collectors.toUnmodifiableList/Set/Map` |
+| 12           | `Collectors.teeing` |
+| 16           | `Stream.toList()` |
+| 22 (Preview) | Stream Gatherers (windowing, folding, custom gatherers) |
+| 23           | Stream Gatherers finalized |
+
+### Streams Subway Map
+```
+Java 8 ──▶ Java 9 ──▶ Java 10 ──▶ Java 12 ──▶ Java 16 ──▶ Java 22 ──▶ Java 23
+  │         │           │           │           │           │           │
+  │         │           │           │           │           │           │
+  └─ Streams API   ── dropWhile,   ── toUnmod   ── teeing   ── toList   ── Gatherers (preview) ── Gatherers (final)
+     introduced        takeWhile      Collectors   Collector   method      (windowing, folding)     (finalized)
+```
+
+### Pattern Matching & instanceof Evolution
+| Java Version | Pattern Matching Feature Added/Changed |
+|--------------|---------------------------------------|
+| 14           | Pattern matching for `instanceof` (preview) |
+| 16           | Pattern matching for `instanceof` (standard) |
+| 17-18        | Pattern matching for `switch` (preview) |
+| 19-20        | Record patterns (preview), more switch improvements |
+| 21           | Pattern matching for `switch` and record patterns (standard) |
+| 23           | Primitive types in patterns, instanceof, and switch (preview) |
+
+### Pattern Matching Subway Map
+```
+Java 14 ──▶ Java 16 ──▶ Java 18 ──▶ Java 19 ──▶ Java 21 ──▶ Java 23
+  │         │           │           │           │           │
+  │         │           │           │           │           │
+  └─ instanceof   ── instanceof   ── switch    ── record   ── switch &  ── primitives in
+     (preview)        (standard)      (preview)    patterns    record      patterns/switch
+                                               (preview)    (standard)   (preview)
+```
+
+### Records Evolution
+| Java Version | Records Feature Added/Changed |
+|--------------|------------------------------|
+| 14           | Records introduced (preview) |
+| 16           | Records: inner class support, refinements |
+| 19-20        | Record patterns (preview) |
+| 21           | Record patterns (standard) |
+
+### Records Subway Map
+```
+Java 14 ──▶ Java 16 ──▶ Java 19 ──▶ Java 21
+  │         │           │           │
+  │         │           │           │
+  └─ Records    ── inner class  ── record   ── record
+     (preview)      support         patterns    patterns
+                    & refinements   (preview)   (standard)
+```
+
+### Collections Evolution
+| Java Version | Collections Feature Added/Changed |
+|--------------|----------------------------------|
+| 9            | Factory methods for List, Set, Map |
+| 10           | Unmodifiable collections via `copyOf` and collectors |
+| 11           | `toArray` method improvements |
+| 21           | Sequenced collections (new interfaces) |
+
+### Collections Subway Map
+```
+Java 9 ──▶ Java 10 ──▶ Java 11 ──▶ Java 21
+  │         │           │           │
+  │         │           │           │
+  └─ Factory    ── Unmodifiable ── toArray   ── Sequenced
+     methods        collections      method      collections
+```
+
+### Concurrency Evolution
+| Java Version | Concurrency Feature Added/Changed |
+|--------------|----------------------------------|
+| 19           | Virtual threads (preview), structured concurrency (preview) |
+| 20           | Virtual threads (2nd preview), structured concurrency (2nd preview), scoped values (preview) |
+| 21           | Virtual threads (standard), structured concurrency (improved), scoped values (preview) |
+| 22           | Structured concurrency (2nd preview), scoped values (2nd preview) |
+| 23           | Structured concurrency (3rd preview), scoped values (3rd preview) |
+
+### Concurrency Subway Map
+```
+Java 19 ──▶ Java 20 ──▶ Java 21 ──▶ Java 22 ──▶ Java 23
+  │         │           │           │           │
+  │         │           │           │           │
+  └─ Virtual    ── Virtual    ── Virtual   ── Structured ── Structured
+     threads,      threads,      threads,     concurrency   concurrency
+     structured    structured    structured   (2nd preview) (3rd preview)
+     concurrency   concurrency   concurrency  scoped values scoped values
+     (preview)     (2nd preview) (standard)  (2nd preview) (3rd preview)
+     scoped values scoped values scoped values
+     (preview)     (preview)     (preview)
+```
+
+### String Handling Evolution
+| Java Version | String Feature Added/Changed |
+|--------------|-----------------------------|
+| 11           | New string methods: `isBlank`, `lines`, `strip`, `repeat` |
+| 12           | `indent` method |
+| 15           | Text blocks (multi-line strings) |
+| 18           | UTF-8 by default |
+| 21-22        | String templates (preview) |
+
+### String Handling Subway Map
+```
+Java 11 ──▶ Java 12 ──▶ Java 15 ──▶ Java 18 ──▶ Java 21 ──▶ Java 22
+  │         │           │           │           │           │
+  │         │           │           │           │           │
+  └─ New string ── indent   ── Text    ── UTF-8   ── String    ── String
+     methods        method      blocks     default     templates    templates
+     (isBlank,                  (multi-                (preview)    (2nd preview)
+     lines, strip,              line)
+     repeat)
+```
+
+---
+
 ## How to Use
 
 - **Requirements:** Java 23+ (some features require preview flags or newer JDKs)
