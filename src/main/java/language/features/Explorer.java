@@ -41,6 +41,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
+// import java.util.concurrent.Future;
+// import java.util.concurrent.ScopedValue;
+// import java.util.concurrent.StructuredTaskScope;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -48,6 +51,7 @@ import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.random.RandomGeneratorFactory;
 import java.util.stream.Collectors;
+import java.util.stream.Gatherers;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -63,6 +67,7 @@ public class Explorer {
 
   public static void main(String[] args) throws Exception {
 
+    java22();
     java21();
     java20();
     java19();
@@ -361,6 +366,60 @@ public class Explorer {
     unnamed_patterns(21);
 
     // System.exit(0);
+  }
+
+    /**
+   * Features added in Java 22:
+   *
+   * <ul>
+   *   <li>Unnamed Variables & Patterns (final)
+   *   <li>Statements Before super(...) (preview)
+   *   <li>Stream Gatherers (preview)
+   *   <li>Structured Concurrency (second preview)
+   *   <li>Scoped Values (second preview)
+   *   <li>String Templates (second preview)
+   * </ul>
+   */
+  private static void java22() throws Exception {
+    // Features added in Java 22
+    unnamed_patterns(22);
+    java22_language_modifications();
+    streams(22);
+    structured_concurrency(22);
+    scoped_values(22);
+    string(22);
+    // (Other feature demos to be added in subsequent steps)
+  }
+
+  /**
+   * Java 22 :: Statements Before super(...) (Preview)
+   * Demonstrates the ability to have statements before an explicit constructor invocation.
+   */
+  private static void java22_language_modifications() throws Exception {
+    LOGGER.info("Java 22 :: Statements Before super(...) (Preview)");
+    System.out.println("""
+            In Java 22 (preview), you can now write statements before calling super() or this() in a constructor,
+            as long as those statements do not reference the instance being created (no 'this' or instance fields).
+            This allows for argument validation, preparation, and sharing before delegating to the superclass constructor.
+
+            Example (requires --enable-preview):
+            class Rectangle {
+                int width, height;
+                Rectangle(int width, int height) {
+                    this.width = width;
+                    this.height = height;
+                }
+            }
+            class Square extends Rectangle {
+                Square(int area) {
+                    if (area < 0) throw new IllegalArgumentException();
+                    int side = (int)Math.sqrt(area);
+                    super(side, side);
+                }
+            }
+            // new Square(49); // Will print order of execution
+            """);
+    delayBuffer();
   }
 
   // =========== Language Changes=================================================================
@@ -1297,6 +1356,27 @@ public class Explorer {
         delayBuffer();
       }
     }
+    else if (java == 22) {
+      LOGGER.info("Java 22 :: Stream Gatherers (Preview)");
+      System.out.println("""
+              Stream Gatherers are a preview feature in Java 22. They allow you to define custom intermediate operations in stream pipelines, such as windowing and folding, using the new gather() method and Gatherers utility class.
+              
+              Example (requires --enable-preview):
+              List<String> words = List.of(\"the\", \"be\", \"two\", \"of\", \"and\", \"a\", \"in\", \"that\");
+              List<List<String>> fixedWindows = words.stream()
+                  .gather(Gatherers.windowFixed(3))
+                  .toList();
+              System.out.println(fixedWindows); // [[the, be, two], [of, and, a], [in, that]]
+              
+              This feature enables more flexible and powerful stream processing, but requires the preview flag to run.
+              """);
+      List<String> words = List.of("the", "be", "two", "of", "and", "a", "in", "that");
+      List<List<String>> fixedWindows = words.stream()
+          .gather(Gatherers.windowFixed(3))
+          .toList();
+      System.out.println(fixedWindows); // [[the, be, two], [of, and, a], [in, that]]
+      delayBuffer();
+    }
   }
 
   private static void string(final int java) throws Exception {
@@ -1370,7 +1450,7 @@ public class Explorer {
         delayBuffer();
       }
     }
-    // } else if(java == 21) {
+        // } else if(java == 21) {
     //   LOGGER.info("Java 21 :: String Templates (Preview)");
     //   {
     //     System.out.println("""
@@ -1400,6 +1480,41 @@ public class Explorer {
     //     delayBuffer();
     //   }
     // }
+    else if(java == 22) {
+      LOGGER.info("Java 22 :: String Templates (Second Preview)");
+      System.out.println(
+              "String Templates enter their second preview in Java 22. They provide a more readable way to embed expressions inside string literals, using template processors like STR.\n" +
+              "\n" +
+              "Example (requires --enable-preview):\n" +
+              "String name = \"world\";\n" +
+              "String message = STR.\"Hello {name}!\";\n" +
+              "System.out.println(message); // Hello world!\n" +
+              "\n" +
+              "// Multi-line with expressions\n" +
+              "int x = 10, y = 20;\n" +
+              "String result = STR.\"\"\"\n" +
+              "    The sum of \\{x} and \\{y}\n" +
+              "    is \\{x + y}\n" +
+              "    \"\"\";\n" +
+              "System.out.println(result);\n" +
+              "\n" +
+              "This feature requires the preview flag to run.\n"
+      );
+      // Uncomment the following block and run with --enable-preview on JDK 22+ to see String Templates in action:
+      /*
+      String name = "world";
+      String message = STR."Hello {name}!";
+      System.out.println(message); // Hello world!
+
+      int x = 10, y = 20;
+      String result = STR."""
+          The sum of \{x} and \{y}
+          is \{x + y}
+          """;
+      System.out.println(result);
+      */
+      delayBuffer();
+    }
   }
 
   private static void switch_expression(final int java) throws Exception {
@@ -1715,6 +1830,39 @@ public class Explorer {
         
         delayBuffer();
       }
+    } else if(java == 22) {
+      LOGGER.info("Java 22 :: Structured Concurrency (Second Preview)");
+      System.out.println("""
+                Structured Concurrency enters its second preview in Java 22. It continues to simplify concurrent programming by treating related tasks as a single unit of work, improving error handling and cancellation.
+                
+                Example (requires --enable-preview):
+                try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+                    Future<String> user = scope.fork(() -> findUser());
+                    Future<Integer> order = scope.fork(() -> fetchOrder());
+                    
+                    scope.join();           // Wait for both forks
+                    scope.throwIfFailed();  // ... and propagate errors
+                    
+                    // Here, both forks have succeeded
+                    processOrder(user.resultNow(), order.resultNow());
+                }
+                
+                This feature requires the preview flag to run.
+                """);
+      // Uncomment the following block and run with --enable-preview on JDK 22+ to see Structured Concurrency in action:
+      /*
+      try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+          Future<String> user = scope.fork(() -> "user-data");
+          Future<Integer> order = scope.fork(() -> 42);
+          
+          scope.join();
+          scope.throwIfFailed();
+          
+          System.out.println("User: " + user.resultNow());
+          System.out.println("Order: " + order.resultNow());
+      }
+      */
+      delayBuffer();
     }
   }
 
@@ -1750,6 +1898,41 @@ public class Explorer {
         
         delayBuffer();
       }
+    } else if(java == 22) {
+      LOGGER.info("Java 22 :: Scoped Values (Second Preview)");
+      System.out.println("""
+                Scoped Values enter their second preview in Java 22. They continue to provide a safer, immutable alternative to ThreadLocal for sharing data within and across threads.
+                
+                Example (requires --enable-preview):
+                final ScopedValue<String> USER_ID = ScopedValue.newInstance();
+                
+                void processRequest(String userId) {
+                    ScopedValue.where(USER_ID, userId)
+                        .run(() -> {
+                            // Code here can access USER_ID
+                            String id = USER_ID.get();
+                            // Value is available even in child threads
+                            processSubTask();
+                        });
+                    // Value is not available here
+                }
+                
+                This feature requires the preview flag to run.
+                """);
+      // Uncomment the following block and run with --enable-preview on JDK 22+ to see Scoped Values in action:
+      /*
+      final ScopedValue<String> USER_ID = ScopedValue.newInstance();
+      
+      void processRequest(String userId) {
+          ScopedValue.where(USER_ID, userId)
+              .run(() -> {
+                  System.out.println("User in scope: " + USER_ID.get());
+              });
+          // USER_ID is not available here
+      }
+      processRequest("alice");
+      */
+      delayBuffer();
     }
   }
 
@@ -1763,10 +1946,52 @@ public class Explorer {
                 
                 Example (when preview enabled):
                 if (obj instanceof String s) {
-                    System.out.println("It's a string: " + s);
+                    System.out.println(\"It's a string: \" + s);
                 }
                 """);
         
+        delayBuffer();
+      }
+    } else if(java == 22) {
+      LOGGER.info("Java 22 :: Unnamed Variables & Patterns (Final)");
+      {
+        System.out.println("""
+                Unnamed variables and patterns are now a permanent feature in Java 22.
+                Use '_' as a variable or pattern name when the value is unused.
+                Examples:
+                - Catch block: catch (Exception _) { ... }
+                - Lambda: map.computeIfAbsent(key, _ -> new ArrayList<>())
+                - For-each: for (var _ : list) { ... }
+                - Record pattern: if (obj instanceof Point(int x, _)) { ... }
+                """);
+
+        // Demo: catch block
+        try {
+          Integer.parseInt("not_a_number");
+        } catch (NumberFormatException _) {
+          System.out.println("Caught NumberFormatException with unnamed variable");
+        }
+
+        // Demo: lambda parameter
+        Map<String, List<String>> map = Map.of();
+        // The following is just a syntax example, not executable as map is immutable and empty
+        System.out.println("Lambda with unnamed parameter: map.computeIfAbsent(key, _ -> new ArrayList<>())");
+
+        // Demo: for-each loop
+        List<String> list = List.of("a", "b", "c");
+        int count = 0;
+        for (var _ : list) {
+          count++;
+        }
+        System.out.println("Counted elements using unnamed variable in for-each: " + count);
+
+        // Demo: record pattern
+        record Point(int x, int y) {}
+        Object obj = new Point(42, 99);
+        if (obj instanceof Point(int x, _)) {
+          System.out.println("Matched Point with x = " + x + ", y is ignored using unnamed pattern");
+        }
+
         delayBuffer();
       }
     }
