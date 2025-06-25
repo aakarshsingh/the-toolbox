@@ -239,6 +239,80 @@ Java 24
 
 ---
 
+## Java Feature JEP Reference Table
+
+| Java Version | Feature Name                                              | JEP Link                                              |
+|--------------|----------------------------------------------------------|-------------------------------------------------------|
+| **24**       | Stream Gatherers (final)                                 | [JEP 485](https://openjdk.org/jeps/485)              |
+|              | Scoped Values (4th preview)                              | [JEP 487](https://openjdk.org/jeps/487)              |
+|              | Structured Concurrency (4th preview)                     | [JEP 499](https://openjdk.org/jeps/499)              |
+|              | Primitive Types in Patterns, instanceof, and switch      | [JEP 488](https://openjdk.org/jeps/488)              |
+|              | Flexible Constructor Bodies (3rd preview)                | [JEP 492](https://openjdk.org/jeps/492)              |
+|              | Unnamed Variables & Patterns (final)                     | [JEP 494](https://openjdk.org/jeps/494)              |
+|              | Class-File API                                           | [JEP 484](https://openjdk.org/jeps/484)              |
+|              | Vector API (incubator)                                   | [JEP 489](https://openjdk.org/jeps/489)              |
+|              | Prepare to Restrict the Use of JNI                       | [JEP 472](https://openjdk.org/jeps/472)              |
+|              | Warn upon Use of Memory-Access Methods in sun.misc.Unsafe| [JEP 498](https://openjdk.org/jeps/498)              |
+| **23**       | Primitive Types in Patterns, instanceof, and switch      | [JEP 443](https://openjdk.org/jeps/443)              |
+|              | Stream Gatherers (preview/final)                         | [JEP 461](https://openjdk.org/jeps/461)              |
+|              | Structured Concurrency (3rd preview)                     | [JEP 453](https://openjdk.org/jeps/453)              |
+|              | Scoped Values (3rd preview)                              | [JEP 446](https://openjdk.org/jeps/446)              |
+|              | Flexible Constructor Bodies (2nd preview)                | [JEP 447](https://openjdk.org/jeps/447)              |
+| **22**       | Unnamed Variables & Patterns (final)                     | [JEP 443](https://openjdk.org/jeps/443)              |
+|              | Statements Before super(...) (preview)                   | [JEP 447](https://openjdk.org/jeps/447)              |
+|              | Stream Gatherers (preview)                               | [JEP 461](https://openjdk.org/jeps/461)              |
+|              | Structured Concurrency (2nd preview)                     | [JEP 453](https://openjdk.org/jeps/453)              |
+|              | Scoped Values (2nd preview)                              | [JEP 446](https://openjdk.org/jeps/446)              |
+|              | String Templates (2nd preview)                           | [JEP 430](https://openjdk.org/jeps/430)              |
+| **21**       | String Templates (preview)                               | [JEP 430](https://openjdk.org/jeps/430)              |
+|              | Sequenced Collections                                    | [JEP 431](https://openjdk.org/jeps/431)              |
+|              | Record Patterns (standard)                               | [JEP 440](https://openjdk.org/jeps/440)              |
+|              | Pattern Matching for Switch (standard)                   | [JEP 441](https://openjdk.org/jeps/441)              |
+|              | Virtual Threads (standard)                               | [JEP 444](https://openjdk.org/jeps/444)              |
+|              | Scoped Values (preview)                                  | [JEP 446](https://openjdk.org/jeps/446)              |
+|              | Unnamed Patterns and Variables (preview)                 | [JEP 443](https://openjdk.org/jeps/443)              |
+| **20**       | Record Patterns (2nd preview)                            | [JEP 432](https://openjdk.org/jeps/432)              |
+|              | Pattern Matching for Switch (4th preview)                | [JEP 433](https://openjdk.org/jeps/433)              |
+|              | Scoped Values (preview)                                  | [JEP 429](https://openjdk.org/jeps/429)              |
+|              | Virtual Threads (2nd preview)                            | [JEP 436](https://openjdk.org/jeps/436)              |
+|              | Structured Concurrency (2nd preview)                     | [JEP 437](https://openjdk.org/jeps/437)              |
+| **19**       | Record Patterns (preview)                                | [JEP 405](https://openjdk.org/jeps/405)              |
+|              | Virtual Threads (preview)                                | [JEP 425](https://openjdk.org/jeps/425)              |
+|              | Structured Concurrency (preview)                         | [JEP 428](https://openjdk.org/jeps/428)              |
+|              | Pattern Matching for Switch (3rd preview)                | [JEP 427](https://openjdk.org/jeps/427)              |
+|              | Vector API (4th incubator)                               | [JEP 426](https://openjdk.org/jeps/426)              |
+| **18**       | Simple Web Server                                        | [JEP 408](https://openjdk.org/jeps/408)              |
+|              | UTF-8 by Default                                         | [JEP 400](https://openjdk.org/jeps/400)              |
+|              | Pattern Matching for Switch (2nd preview)                | [JEP 420](https://openjdk.org/jeps/420)              |
+| **17**       | Sealed Classes                                           | [JEP 409](https://openjdk.org/jeps/409)              |
+|              | Enhanced Pseudo-Random Number Generators                 | [JEP 356](https://openjdk.org/jeps/356)              |
+| **16**       | Records (standard)                                       | [JEP 395](https://openjdk.org/jeps/395)              |
+|              | Pattern Matching for instanceof                          | [JEP 394](https://openjdk.org/jeps/394)              |
+|              | Stream.toList()                                          | [JEP 376](https://openjdk.org/jeps/376)              |
+|              | Day Period Support                                       | [JEP 378](https://openjdk.org/jeps/378)              |
+| **15**       | Text Blocks                                              | [JEP 378](https://openjdk.org/jeps/378)              |
+| **14**       | Records (preview)                                        | [JEP 359](https://openjdk.org/jeps/359)              |
+|              | Helpful NullPointerExceptions                            | [JEP 358](https://openjdk.org/jeps/358)              |
+| **13**       | Switch Expressions (preview)                             | [JEP 354](https://openjdk.org/jeps/354)              |
+| **12**       | Compact Number Formatting                                | [JEP 334](https://openjdk.org/jeps/334)              |
+|              | File::mismatch                                           | [JEP 353](https://openjdk.org/jeps/353)              |
+|              | Teeing Collector                                         | [JEP 350](https://openjdk.org/jeps/350)              |
+| **11**       | HTTP Client                                              | [JEP 321](https://openjdk.org/jeps/321)              |
+|              | Local-Variable Syntax for Lambda Parameters              | [JEP 323](https://openjdk.org/jeps/323)              |
+|              | String Methods (isBlank, lines, strip, repeat)           | [JEP 181](https://openjdk.org/jeps/181)              |
+| **10**       | Local Variable Type Inference                            | [JEP 286](https://openjdk.org/jeps/286)              |
+|              | Unmodifiable Collections                                 | [JEP 269](https://openjdk.org/jeps/269)              |
+| **9**        | Collection Factory Methods                               | [JEP 269](https://openjdk.org/jeps/269)              |
+|              | Stream API Improvements                                  | [JEP 266](https://openjdk.org/jeps/266)              |
+|              | Private Interface Methods                                | [JEP 213](https://openjdk.org/jeps/213)              |
+|              | Optional Class Enhancements                              | [JEP 286](https://openjdk.org/jeps/286)              |
+| **8**        | Streams API                                              | [JEP 107](https://openjdk.org/jeps/107)              |
+|              | Lambdas                                                  | [JEP 126](https://openjdk.org/jeps/126)              |
+|              | Date & Time API                                          | [JEP 310](https://openjdk.org/jeps/310)              |
+|              | Default Methods in Interfaces                            | [JEP 218](https://openjdk.org/jeps/218)              |
+
+---
+
 ## How to Use
 
 - **Requirements:** Java 24+ recommended for latest features; some features require preview flags or newer JDKs
