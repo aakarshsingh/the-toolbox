@@ -54,7 +54,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Gatherers;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -66,7 +65,7 @@ public class Explorer {
   private static final Logger LOGGER = Logger.getLogger(Explorer.class.getName());
 
   public static void main(String[] args) throws Exception {
-
+    java23();
     java22();
     java21();
     java20();
@@ -82,7 +81,6 @@ public class Explorer {
     java10();
     java9();
     java8();
-
   }
 
   /**
@@ -368,7 +366,7 @@ public class Explorer {
     // System.exit(0);
   }
 
-    /**
+  /**
    * Features added in Java 22:
    *
    * <ul>
@@ -383,7 +381,7 @@ public class Explorer {
   private static void java22() throws Exception {
     // Features added in Java 22
     unnamed_patterns(22);
-    java22_language_modifications();
+    language_modifications(22);
     streams(22);
     structured_concurrency(22);
     scoped_values(22);
@@ -392,116 +390,115 @@ public class Explorer {
   }
 
   /**
-   * Java 22 :: Statements Before super(...) (Preview)
-   * Demonstrates the ability to have statements before an explicit constructor invocation.
+   * Features added in Java 23:
+   *
+   * <ul>
+   *   <li>Primitive Types in Patterns, instanceof, and switch (Preview)
+   *   <li>Stream Gatherers (final/preview)
+   *   <li>Structured Concurrency (3rd preview)
+   *   <li>Scoped Values (3rd preview)
+   *   <li>Flexible Constructor Bodies (2nd preview)
+   * </ul>
    */
-  private static void java22_language_modifications() throws Exception {
-    LOGGER.info("Java 22 :: Statements Before super(...) (Preview)");
-    System.out.println("""
-            In Java 22 (preview), you can now write statements before calling super() or this() in a constructor,
-            as long as those statements do not reference the instance being created (no 'this' or instance fields).
-            This allows for argument validation, preparation, and sharing before delegating to the superclass constructor.
-
-            Example (requires --enable-preview):
-            class Rectangle {
-                int width, height;
-                Rectangle(int width, int height) {
-                    this.width = width;
-                    this.height = height;
-                }
-            }
-            class Square extends Rectangle {
-                Square(int area) {
-                    if (area < 0) throw new IllegalArgumentException();
-                    int side = (int)Math.sqrt(area);
-                    super(side, side);
-                }
-            }
-            // new Square(49); // Will print order of execution
-            """);
-    delayBuffer();
+  private static void java23() throws Exception {
+    // Features added in Java 23
+    primitive_patterns(23);
+    streams(23);
+    structured_concurrency(23);
+    scoped_values(23);
+    language_modifications(23);
+    // (Other feature demos to be added in subsequent steps)
   }
 
   // =========== Language Changes=================================================================
   private static void classes(final int java) throws Exception {
-    if(java == 17) {
-      LOGGER.info("""
+    if (java == 17) {
+      LOGGER.info(
+          """
               Java 17 :: Sealed Classes. Rules:
               - All permitted subclasses must belong to the same module as the sealed class.
               - Every permitted subclass must explicitly extend the sealed class.
               - Every permitted subclass must define a modifier: final, sealed, or non-sealed.""");
       {
         System.out.println("Valid Example :: ");
-        System.out.println("To seal an interface, we can apply the sealed modifier to its declaration. " +
-                "The permits clause then specifies the classes that are permitted to implement the sealed interface:");
-        System.out.println("""
+        System.out.println(
+            "To seal an interface, we can apply the sealed modifier to its declaration. "
+                + "The permits clause then specifies the classes that are permitted to implement the sealed interface:");
+        System.out.println(
+            """
                 public sealed interface Service permits Car, Truck {
-                
+
                     int getMaxServiceIntervalInMonths();
-                
+
                     default int getMaxDistanceBetweenServicesInKilometers() {
                         return 100000;
                     }
-                
+
                 }
                 """);
         System.out.println();
-        System.out.println("Similar to interfaces, we can seal classes by applying the same sealed modifier. " +
-                "The permits clause should be defined after any extends or implements clause");
-        System.out.println("""
+        System.out.println(
+            "Similar to interfaces, we can seal classes by applying the same sealed modifier. "
+                + "The permits clause should be defined after any extends or implements clause");
+        System.out.println(
+            """
                 public abstract sealed class Vehicle permits Car, Truck {
-                
+
                     protected final String registrationNumber;
-                
+
                     public Vehicle(String registrationNumber) {
                         this.registrationNumber = registrationNumber;
                     }
-                
+
                     public String getRegistrationNumber() {
                         return registrationNumber;
                     }
-                
+
                 }
                 """);
         System.out.println();
-        System.out.println("A permitted subclass must define a modifier. " +
-                "It may be declared final to prevent any further extensions:");
-        System.out.println("""
+        System.out.println(
+            "A permitted subclass must define a modifier. "
+                + "It may be declared final to prevent any further extensions:");
+        System.out.println(
+            """
                 public final class Truck extends Vehicle implements Service {
-                
+
                     private final int loadCapacity;
-                
+
                     public Truck(int loadCapacity, String registrationNumber) {
                         super(registrationNumber);
                         this.loadCapacity = loadCapacity;
                     }
-                
+
                     public int getLoadCapacity() {
                         return loadCapacity;
                     }
-                
+
                     @Override
                     public int getMaxServiceIntervalInMonths() {
                         return 18;
                     }
-                
+
                 }
                 """);
         System.out.println();
-        System.out.println("Sealed classes work very well with records. Since records are implicitly final, " +
-                "the sealed hierarchy is even more concise.");
-        System.out.println("""
+        System.out.println(
+            "Sealed classes work very well with records. Since records are implicitly final, "
+                + "the sealed hierarchy is even more concise.");
+        System.out.println(
+            """
                 public record Car(int numberOfSeats, String registrationNumber) implements Vehicle {
-                
+
                     @Override
                     public String getRegistrationNumber() {
                         return registrationNumber;
                     }
-                
+
                     public int getNumberOfSeats() {
                         return numberOfSeats;
                     }
-                
+
                 }
                 """);
 
@@ -550,41 +547,42 @@ public class Explorer {
         delayBuffer();
       }
     } else if (java == 11) {
-        LOGGER.info("Java 11 :: Collection to an Array");
-        {
-            List<String> strings = List.of("one", "two");
-            String[] listToArray = strings.toArray(String[]::new);
-            System.out.println("listToArray.length = " + listToArray.length);
+      LOGGER.info("Java 11 :: Collection to an Array");
+      {
+        List<String> strings = List.of("one", "two");
+        String[] listToArray = strings.toArray(String[]::new);
+        System.out.println("listToArray.length = " + listToArray.length);
 
-            delayBuffer();
-        }
+        delayBuffer();
+      }
     } else if (java == 21) {
       LOGGER.info("Java 21 :: Sequenced Collections");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Java 21 introduced new interfaces for collections that have a well-defined encounter order:
                 - SequencedCollection
                 - SequencedSet
                 - SequencedMap
-                
+
                 These interfaces add methods like:
                 - getFirst()/getLast()
                 - addFirst()/addLast()
                 - removeFirst()/removeLast()
                 - reversed()
-                
+
                 Example:
                 List<String> list = new ArrayList<>();
                 list.addLast("end");
                 list.addFirst("start");
-                
+
                 String first = list.getFirst();  // "start"
                 String last = list.getLast();    // "end"
-                
+
                 // Get reversed view
                 List<String> reversed = list.reversed();
                 """);
-        
+
         delayBuffer();
       }
     }
@@ -704,11 +702,12 @@ public class Explorer {
   }
 
   private static void file(final int java) throws Exception {
-    if(java == 11) {
+    if (java == 11) {
       LOGGER.info("Java 11 :: Reading & Writing of String to Files");
-      final Path path = Files.writeString(Files.createTempFile("temp", ".txt"), "You are being watched!");
+      final Path path =
+          Files.writeString(Files.createTempFile("temp", ".txt"), "You are being watched!");
       System.out.println(Files.readString(path));
-    } else if(java == 12) {
+    } else if (java == 12) {
       LOGGER.info("Java 12 :: File Mismatch - used to find the position of first mismatched byte");
 
       Path tempF1 = Files.createTempFile("f1", ".txt");
@@ -717,15 +716,16 @@ public class Explorer {
       Files.writeString(tempF1, "Hello World!");
       Files.writeString(tempF2, "Hello General!");
 
-      System.out.println("Files.mismatch = "+Files.mismatch(tempF1, tempF2));
+      System.out.println("Files.mismatch = " + Files.mismatch(tempF1, tempF2));
 
       delayBuffer();
     }
   }
 
   private static void http_client(final int java) throws Exception {
-      if(java == 11) {
-          LOGGER.info("""
+    if (java == 11) {
+      LOGGER.info(
+          """
                   Java 11 :: A new HTTP Client that implements HTTP/2 and WebSocketIt is aimed at replacing the
                   legacy HttpURLConnection. The new API is feature rich and is fully asynchronous. It improves
                   performance by using stream multiplexing, header compression, etc. The core classes/interfaces are:
@@ -733,31 +733,33 @@ public class Explorer {
                   - The HttpRequest class, java.net.http.HttpRequest
                   - The HttpResponse<T> interface, java.net.http.HttpResponse
                   - The WebSocket interface, java.net.http.WebSocket""");
-          {
-              HttpClient client = HttpClient.newHttpClient();
+      {
+        HttpClient client = HttpClient.newHttpClient();
 
-              HttpRequest request = HttpRequest.newBuilder(new URI("https://postman-echo.com/get"))
-                              .GET()
-                              .version(HttpClient.Version.HTTP_2)
-                              .timeout(Duration.of(10, ChronoUnit.SECONDS))
-                              .build();
+        HttpRequest request =
+            HttpRequest.newBuilder(new URI("https://postman-echo.com/get"))
+                .GET()
+                .version(HttpClient.Version.HTTP_2)
+                .timeout(Duration.of(10, ChronoUnit.SECONDS))
+                .build();
 
-              // sync call
-              HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-              System.out.println("response = " + response.body());
+        // sync call
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("response = " + response.body());
 
-              // async call
-              CompletableFuture<HttpResponse<String>> future = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
-              String result = future.thenApply(HttpResponse::body).get(10, TimeUnit.SECONDS);
-              System.out.println("response = " + result);
+        // async call
+        CompletableFuture<HttpResponse<String>> future =
+            client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+        String result = future.thenApply(HttpResponse::body).get(10, TimeUnit.SECONDS);
+        System.out.println("response = " + result);
 
-              delayBuffer();
-          }
+        delayBuffer();
       }
+    }
   }
 
   private static void instance_of(final int java) throws Exception {
-    if(java == 16) {
+    if (java == 16) {
       LOGGER.info("Java 16 :: Pattern Matching for instanceOf");
       {
         Object javaVersion = "Java 16";
@@ -959,21 +961,20 @@ public class Explorer {
   }
 
   private static void not_predicate(final int java) throws Exception {
-      if(java == 11) {
-          LOGGER.info("Java 11 :: The Not Predicated");
-          {
-              List<String> strings = Arrays.asList(" ", "  ", "Hello");
-              List<String> withoutEmptyStrings = strings.stream()
-                      .filter(Predicate.not(String::isEmpty))
-                      .collect(Collectors.toList());
-              System.out.println("withoutEmptyStrings = " + withoutEmptyStrings);
-              delayBuffer();
-          }
+    if (java == 11) {
+      LOGGER.info("Java 11 :: The Not Predicated");
+      {
+        List<String> strings = Arrays.asList(" ", "  ", "Hello");
+        List<String> withoutEmptyStrings =
+            strings.stream().filter(Predicate.not(String::isEmpty)).collect(Collectors.toList());
+        System.out.println("withoutEmptyStrings = " + withoutEmptyStrings);
+        delayBuffer();
       }
+    }
   }
 
   private static void npe(final int java) throws Exception {
-    if(java == 14) {
+    if (java == 14) {
       LOGGER.info("Java 14 :: Improved NPEs");
       {
         int[] arr = null;
@@ -986,11 +987,12 @@ public class Explorer {
     }
   }
 
-  private static void number(final int java) throws Exception{
-    if(java == 12) {
+  private static void number(final int java) throws Exception {
+    if (java == 12) {
       LOGGER.info("Java 12 :: Compact Number Formatting");
       {
-        NumberFormat longFormat = NumberFormat.getCompactNumberInstance(new Locale("en", "US"), NumberFormat.Style.LONG);
+        NumberFormat longFormat =
+            NumberFormat.getCompactNumberInstance(new Locale("en", "US"), NumberFormat.Style.LONG);
         longFormat.setMaximumFractionDigits(2);
 
         System.out.println("shortFormat = " + longFormat.format(1313));
@@ -1000,19 +1002,19 @@ public class Explorer {
     } else if (java == 17) {
       LOGGER.info("Java 17 :: Pseudo-Random Number Generators");
       {
-
         System.out.println("All possible Generator IMPLs:");
 
         RandomGeneratorFactory.all()
-                .map(fac -> fac.group()+ " : " +fac.name())
-                .sorted()
-                .forEach(System.out::println);
+            .map(fac -> fac.group() + " : " + fac.name())
+            .sorted()
+            .forEach(System.out::println);
 
         System.out.println();
 
-        RandomGeneratorFactory.of("Xoshiro256PlusPlus").create()
-                .ints(5, 0, 100)
-                .forEach(System.out::println);
+        RandomGeneratorFactory.of("Xoshiro256PlusPlus")
+            .create()
+            .ints(5, 0, 100)
+            .forEach(System.out::println);
 
         delayBuffer();
       }
@@ -1055,16 +1057,18 @@ public class Explorer {
   }
 
   private static void records(final int java) throws Exception {
-    if(java == 14) {
-      LOGGER.info("Java 14 :: Records were introduced to reduce repetitive boilerplate code in data model POJOs");
+    if (java == 14) {
+      LOGGER.info(
+          "Java 14 :: Records were introduced to reduce repetitive boilerplate code in data model POJOs");
 
       record Java(String version, LocalDate releaseDate) {
         public Java {
-          if(releaseDate.isBefore(LocalDate.of(1996, 1, 23))) {
+          if (releaseDate.isBefore(LocalDate.of(1996, 1, 23))) {
             throw new IllegalArgumentException("Java was first release on 23rd Jan '96");
           }
         }
-      };
+      }
+      ;
 
       Java java1 = new Java("JDK 1.0 (Oak)", LocalDate.of(1996, 1, 23));
 
@@ -1079,7 +1083,7 @@ public class Explorer {
 
         // defining records as class members of inner classes wasn't possible earlier
         class Outer {
-           class Inner {
+          class Inner {
             Java java2 = new Java("J2SE 1.2 (Playground)", LocalDate.of(1998, 12, 13));
           }
         }
@@ -1089,61 +1093,64 @@ public class Explorer {
     } else if (java == 19) {
       LOGGER.info("Java 19 :: Record Patterns (Preview)");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Record Patterns were introduced as a preview feature in Java 19.
                 They allow for destructuring record values in pattern matching contexts.
-                
+
                 To use this feature, you needed to enable preview features:
                 javac --enable-preview --source 19 ...
                 java --enable-preview ...
-                
+
                 Example (when preview enabled):
                 record Point(int x, int y) {}
                 record Rectangle(Point upperLeft, Point lowerRight) {}
-                
+
                 // Pattern matching in if statement
                 if (obj instanceof Rectangle(Point(int x1, int y1), Point(int x2, int y2))) {
                     int width = x2 - x1;
                     int height = y2 - y1;
                 }
                 """);
-        
+
         delayBuffer();
       }
     } else if (java == 20) {
       LOGGER.info("Java 20 :: Record Patterns (Second Preview)");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Record Patterns continued as a preview feature in Java 20 with some refinements.
                 The main enhancement was better support for type inference and generic records.
-                
+
                 Example (when preview enabled):
                 record Box<T>(T value) {}
-                
+
                 if (obj instanceof Box(String s)) {  // Type inference for generic record pattern
                     System.out.println(s.toLowerCase());
                 }
                 """);
-        
+
         delayBuffer();
       }
     } else if (java == 21) {
       LOGGER.info("Java 21 :: Record Patterns (Standard)");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Record Patterns became a standard feature in Java 21 after being previewed in Java 19-20.
                 They allow for powerful pattern matching and destructuring of record values.
-                
+
                 Example:
                 record Point(int x, int y) {}
                 record Rectangle(Point upperLeft, Point lowerRight) {}
-                
+
                 // Pattern matching in if statement
                 if (obj instanceof Rectangle(Point(var x1, var y1), Point(var x2, var y2))) {
                     int width = x2 - x1;
                     int height = y2 - y1;
                 }
-                
+
                 // Pattern matching in switch
                 return switch (obj) {
                     case Rectangle(Point(var x1, var y1), Point(var x2, var y2))
@@ -1152,7 +1159,7 @@ public class Explorer {
                     default -> "Not a rectangle";
                 };
                 """);
-        
+
         delayBuffer();
       }
     }
@@ -1345,7 +1352,7 @@ public class Explorer {
 
         delayBuffer();
       }
-    } else if(java == 16) {
+    } else if (java == 16) {
       LOGGER.info("Java 16 :: Stream.toList alternate to Collectors");
       {
         List<String> strings = List.of("one", "two", "three");
@@ -1355,43 +1362,62 @@ public class Explorer {
 
         delayBuffer();
       }
-    }
-    else if (java == 22) {
+    } else if (java == 22) {
       LOGGER.info("Java 22 :: Stream Gatherers (Preview)");
-      System.out.println("""
+      System.out.println(
+          """
               Stream Gatherers are a preview feature in Java 22. They allow you to define custom intermediate operations in stream pipelines, such as windowing and folding, using the new gather() method and Gatherers utility class.
-              
+
               Example (requires --enable-preview):
               List<String> words = List.of(\"the\", \"be\", \"two\", \"of\", \"and\", \"a\", \"in\", \"that\");
               List<List<String>> fixedWindows = words.stream()
                   .gather(Gatherers.windowFixed(3))
                   .toList();
               System.out.println(fixedWindows); // [[the, be, two], [of, and, a], [in, that]]
-              
+
               This feature enables more flexible and powerful stream processing, but requires the preview flag to run.
               """);
       List<String> words = List.of("the", "be", "two", "of", "and", "a", "in", "that");
-      List<List<String>> fixedWindows = words.stream()
-          .gather(Gatherers.windowFixed(3))
-          .toList();
+      List<List<String>> fixedWindows = words.stream().gather(Gatherers.windowFixed(3)).toList();
       System.out.println(fixedWindows); // [[the, be, two], [of, and, a], [in, that]]
+      delayBuffer();
+    } else if (java == 23) {
+      LOGGER.info("Java 23 :: Stream Gatherers (Final/Preview)");
+      System.out.println(
+          """
+              Stream Gatherers are finalized (or in late preview) in Java 23. They allow you to define custom intermediate operations in stream pipelines, such as windowing and folding, using the gather() method and Gatherers utility class.
+
+              Example (requires --enable-preview):
+              List<String> words = List.of(\"the\", \"be\", \"two\", \"of\", \"and\", \"a\", \"in\", \"that\");
+              List<List<String>> fixedWindows = words.stream()
+                  .gather(Gatherers.windowFixed(4))
+                  .toList();
+              System.out.println(fixedWindows); // [[the, be, two, of], [and, a, in, that]]
+
+              This feature enables more flexible and powerful stream processing, but requires the preview flag to run.
+              """);
+      List<String> words = List.of("the", "be", "two", "of", "and", "a", "in", "that");
+      List<List<String>> fixedWindows = words.stream().gather(Gatherers.windowFixed(4)).toList();
+      System.out.println(fixedWindows); // [[the, be, two, of], [and, a, in, that]]
       delayBuffer();
     }
   }
 
   private static void string(final int java) throws Exception {
-    if(java == 11) {
+    if (java == 11) {
       LOGGER.info(" Java 11 :: New String Methods");
       {
         System.out.println("\" \".isBlank() = " + " ".isBlank());
 
         System.out.println();
-        String multi = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n" +
-                " Vestibulum a tortor at velit semper dapibus.\n" +
-                "Fusce molestie ante diam, non laoreet nisi tempus eu.\n" +
-                "Aliquam vel mi in eros bibendum venenatis sed in nisl.\n" +
-                "Vestibulum sapien lectus, luctus aliquet tincidunt eget, cursus quis sapien.\n";
-        System.out.println("Number of Lines = " + multi.lines().collect(Collectors.toList()).size());
+        String multi =
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n"
+                + " Vestibulum a tortor at velit semper dapibus.\n"
+                + "Fusce molestie ante diam, non laoreet nisi tempus eu.\n"
+                + "Aliquam vel mi in eros bibendum venenatis sed in nisl.\n"
+                + "Vestibulum sapien lectus, luctus aliquet tincidunt eget, cursus quis sapien.\n";
+        System.out.println(
+            "Number of Lines = " + multi.lines().collect(Collectors.toList()).size());
 
         System.out.println();
         System.out.println("strip() is unicode aware, trim() wasn't");
@@ -1406,7 +1432,7 @@ public class Explorer {
 
         delayBuffer();
       }
-    } else if(java == 12) {
+    } else if (java == 12) {
       LOGGER.info(" Java 11 :: New String Methods");
       {
         String s = "Hello World!\nThis is Java 12.";
@@ -1415,19 +1441,20 @@ public class Explorer {
 
         delayBuffer();
       }
-    } else if(java == 18) {
+    } else if (java == 18) {
       LOGGER.info("Java 18 :: UTF-8 by Default");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Java 18 makes UTF-8 the default charset for APIs that previously used the platform's default charset.
                 This means that file.encoding system property now defaults to UTF-8 on all platforms.
-                
+
                 Benefits:
                 - Consistent behavior across all platforms
                 - Better handling of international text
                 - Reduced encoding/decoding issues
                 - Improved portability of applications
-                
+
                 Example APIs affected:
                 - new String(byte[] bytes)
                 - String.getBytes()
@@ -1438,19 +1465,19 @@ public class Explorer {
                 - Formatter
                 - Scanner
                 """);
-        
+
         // Example showing UTF-8 is now default
-        String text = "Hello, 世界!";  // Contains both ASCII and Unicode characters
+        String text = "Hello, 世界!"; // Contains both ASCII and Unicode characters
         byte[] bytes = text.getBytes(); // No charset specified, uses UTF-8
         String decoded = new String(bytes); // No charset specified, uses UTF-8
         System.out.println("Original: " + text);
         System.out.println("Decoded: " + decoded);
         System.out.println("Are equal: " + text.equals(decoded));
-        
+
         delayBuffer();
       }
     }
-        // } else if(java == 21) {
+    // } else if(java == 21) {
     //   LOGGER.info("Java 21 :: String Templates (Preview)");
     //   {
     //     System.out.println("""
@@ -1460,14 +1487,14 @@ public class Explorer {
     //             String name = "world";
     //             String message = STR."Hello {name}!";
     //       """);
-                
+
     //             // Multi-line with expressions
     //             int x = 10, y = 20;
     //             String result = STR.\"\"\"
     //                 The sum of \{x} and \{y}
     //                 is \{x + y}
     //                 \"\"\";
-                
+
     //             // Raw string template
     //             String json = RAW.\"\"\"
     //                 {
@@ -1476,31 +1503,31 @@ public class Explorer {
     //                 }
     //                 \"\"\";
     //             """);
-        
+
     //     delayBuffer();
     //   }
     // }
-    else if(java == 22) {
+    else if (java == 22) {
       LOGGER.info("Java 22 :: String Templates (Second Preview)");
       System.out.println(
-              "String Templates enter their second preview in Java 22. They provide a more readable way to embed expressions inside string literals, using template processors like STR.\n" +
-              "\n" +
-              "Example (requires --enable-preview):\n" +
-              "String name = \"world\";\n" +
-              "String message = STR.\"Hello {name}!\";\n" +
-              "System.out.println(message); // Hello world!\n" +
-              "\n" +
-              "// Multi-line with expressions\n" +
-              "int x = 10, y = 20;\n" +
-              "String result = STR.\"\"\"\n" +
-              "    The sum of \\{x} and \\{y}\n" +
-              "    is \\{x + y}\n" +
-              "    \"\"\";\n" +
-              "System.out.println(result);\n" +
-              "\n" +
-              "This feature requires the preview flag to run.\n"
-      );
-      // Uncomment the following block and run with --enable-preview on JDK 22+ to see String Templates in action:
+          "String Templates enter their second preview in Java 22. They provide a more readable way to embed expressions inside string literals, using template processors like STR.\n"
+              + "\n"
+              + "Example (requires --enable-preview):\n"
+              + "String name = \"world\";\n"
+              + "String message = STR.\"Hello {name}!\";\n"
+              + "System.out.println(message); // Hello world!\n"
+              + "\n"
+              + "// Multi-line with expressions\n"
+              + "int x = 10, y = 20;\n"
+              + "String result = STR.\"\"\"\n"
+              + "    The sum of \\{x} and \\{y}\n"
+              + "    is \\{x + y}\n"
+              + "    \"\"\";\n"
+              + "System.out.println(result);\n"
+              + "\n"
+              + "This feature requires the preview flag to run.\n");
+      // Uncomment the following block and run with --enable-preview on JDK 22+ to see String
+      // Templates in action:
       /*
       String name = "world";
       String message = STR."Hello {name}!";
@@ -1518,7 +1545,7 @@ public class Explorer {
   }
 
   private static void switch_expression(final int java) throws Exception {
-    if(java == 13) {
+    if (java == 13) {
       LOGGER.info("Java 13 :: Switch Expressions");
       {
         String day = "FRIDAY";
@@ -1542,29 +1569,31 @@ public class Explorer {
         }
 
         // new style with ->, break goes away, fall-through goes away
-        isTodayHoliday = switch (day) {
-          case "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY" -> false;
-          case "SATURDAY", "SUNDAY" -> true;
-          default -> throw new IllegalArgumentException("I don't know this day=" + day);
-        };
+        isTodayHoliday =
+            switch (day) {
+              case "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY" -> false;
+              case "SATURDAY", "SUNDAY" -> true;
+              default -> throw new IllegalArgumentException("I don't know this day=" + day);
+            };
 
         System.out.println("isTodayHoliday = " + isTodayHoliday);
 
         delayBuffer();
       }
-    } else if(java == 18) {
+    } else if (java == 18) {
       LOGGER.info("Java 18 :: Pattern Matching for Switch (Second Preview)");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Pattern Matching for switch was available as a preview feature in Java 18.
                 To use this feature, you needed to enable preview features:
-                
+
                 javac --enable-preview --source 18 ...
                 java --enable-preview ...
-                
+
                 The feature allows you to use patterns in case labels, making switch
                 more powerful for object-oriented pattern matching:
-                
+
                 Example (when preview enabled):
                 switch (obj) {
                     case String s -> s.toLowerCase();
@@ -1572,19 +1601,20 @@ public class Explorer {
                     case null -> "null";
                     default -> obj.toString();
                 }
-                
+
                 This feature became standard in Java 21.
                 """);
-        
+
         delayBuffer();
       }
-    } else if(java == 21) {
+    } else if (java == 21) {
       LOGGER.info("Java 21 :: Pattern Matching for Switch (Standard)");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Pattern Matching for switch became a standard feature in Java 21.
                 It allows for powerful pattern matching in switch expressions and statements.
-                
+
                 Example:
                 Object obj = // ...
                 String formatted = switch (obj) {
@@ -1594,7 +1624,7 @@ public class Explorer {
                     case null -> "null";
                     default -> obj.toString();
                 };
-                
+
                 // With guards
                 int result = switch (obj) {
                     case String s when s.length() > 5 -> s.length();
@@ -1604,23 +1634,26 @@ public class Explorer {
                     default -> 0;
                 };
                 """);
-        
+
         delayBuffer();
       }
     }
   }
 
   private static void teeing(final int java) throws Exception {
-    if(java == 12) {
-      LOGGER.info("Java 12 :: Teeing Collector - It is a composite of two downstream collectors. " +
-              "Every element is processed by both downstream collectors. Then their results are passed to the merge " +
-              "function and transformed into the final result.");
+    if (java == 12) {
+      LOGGER.info(
+          "Java 12 :: Teeing Collector - It is a composite of two downstream collectors. "
+              + "Every element is processed by both downstream collectors. Then their results are passed to the merge "
+              + "function and transformed into the final result.");
       {
-        double means = Stream.of(1, 2, 3, 5, 7, 11)
-                             .collect(Collectors.teeing(
-                                     Collectors.summingDouble(i -> i), //downstream 1
-                                     Collectors.counting(), //downstream 2
-                                     (sum, count) -> sum / count)); //merge function
+        double means =
+            Stream.of(1, 2, 3, 5, 7, 11)
+                .collect(
+                    Collectors.teeing(
+                        Collectors.summingDouble(i -> i), // downstream 1
+                        Collectors.counting(), // downstream 2
+                        (sum, count) -> sum / count)); // merge function
 
         System.out.println("means = " + means);
         delayBuffer();
@@ -1628,17 +1661,19 @@ public class Explorer {
     }
   }
 
-  private static void text_blocks(final int java) throws Exception{
-    if(java == 15) {
+  private static void text_blocks(final int java) throws Exception {
+    if (java == 15) {
       LOGGER.info("Java 15 :: Text Blocks brings multi-line string support without line breaks");
       {
-        String beforeJava15 = "<html>\n" +
-                "   <body>\n" +
-                "      <p>Hello, World</p>\n" +
-                "   </body>\n" +
-                "</html>\n";
+        String beforeJava15 =
+            "<html>\n"
+                + "   <body>\n"
+                + "      <p>Hello, World</p>\n"
+                + "   </body>\n"
+                + "</html>\n";
 
-        String java15 = """
+        String java15 =
+            """
                   <html>
                       <body>
                           <p>Hello, World</p>
@@ -1679,61 +1714,66 @@ public class Explorer {
         }
         delayBuffer();
       }
-    } else if(java == 11) {
-        LOGGER.info("Java 11 :: Local-Variable Syntax for Lambda Params. " +
-                "This allows us to use modifiers on local variables. Such as NonNull, etc.");
-        {
-            List<String> strings = Arrays.asList("one", "two");
-            String result = strings.stream()
-                    .map((@NonNull var x) -> x.toLowerCase())
-                    .collect(Collectors.joining(", "));
-            System.out.println("result = " + result);
-        }
+    } else if (java == 11) {
+      LOGGER.info(
+          "Java 11 :: Local-Variable Syntax for Lambda Params. "
+              + "This allows us to use modifiers on local variables. Such as NonNull, etc.");
+      {
+        List<String> strings = Arrays.asList("one", "two");
+        String result =
+            strings.stream()
+                .map((@NonNull var x) -> x.toLowerCase())
+                .collect(Collectors.joining(", "));
+        System.out.println("result = " + result);
+      }
 
-        delayBuffer();
+      delayBuffer();
     }
   }
 
   private static void simple_web_server(final int java) throws Exception {
-    if(java == 18) {
-      LOGGER.info("Java 18 :: Simple Web Server - A command-line tool to start a minimal web server that serves static files");
+    if (java == 18) {
+      LOGGER.info(
+          "Java 18 :: Simple Web Server - A command-line tool to start a minimal web server that serves static files");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 The Simple Web Server can be started using the 'jwebserver' command:
                 $ jwebserver
                 listening on port 8000
-                
+
                 Some useful flags:
                 -p <port>        // Set port number
                 -d <directory>   // Set root directory
                 -o <output>      // Set output format
                 -b <bind>        // Set bind address
                 -h, --help       // Show help message
-                
+
                 This feature provides an easy way to serve static files during development
                 or for simple file-sharing scenarios.
                 """);
-        
+
         delayBuffer();
       }
     }
   }
 
   private static void virtual_threads(final int java) throws Exception {
-    if(java == 19) {
+    if (java == 19) {
       LOGGER.info("Java 19 :: Virtual Threads (Preview)");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Virtual Threads were introduced as a preview feature in Java 19.
                 They are lightweight threads that dramatically reduce the effort
                 of writing, maintaining, and observing high-throughput concurrent applications.
-                
+
                 Example (when preview enabled):
                 // Creating a virtual thread
                 Thread.startVirtualThread(() -> {
                     System.out.println("Running in virtual thread");
                 });
-                
+
                 // Using virtual thread factory
                 try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
                     IntStream.range(0, 10_000).forEach(i -> {
@@ -1744,44 +1784,46 @@ public class Explorer {
                     });
                 }
                 """);
-        
+
         delayBuffer();
       }
-    } else if(java == 20) {
+    } else if (java == 20) {
       LOGGER.info("Java 20 :: Virtual Threads (Second Preview)");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Virtual Threads continued as a preview feature in Java 20 with refinements.
                 The API was stabilized and performance improvements were made.
-                
+
                 Key benefits of virtual threads:
                 - Dramatically improve application throughput
                 - Simplify concurrent programming
                 - Enable writing server applications in a simple thread-per-request style
                 - Scale with near-zero overhead
-                
+
                 They are particularly useful for:
                 - Server applications
                 - Request handling
                 - Task coordination
                 """);
-        
+
         delayBuffer();
       }
-    } else if(java == 21) {
+    } else if (java == 21) {
       LOGGER.info("Java 21 :: Virtual Threads (Standard)");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Virtual Threads became a standard feature in Java 21.
                 They are lightweight threads that make it practical to represent
                 each task or unit of work with a dedicated thread.
-                
+
                 Example:
                 // Creating a virtual thread
                 Thread vThread = Thread.ofVirtual().start(() -> {
                     System.out.println("Running in virtual thread");
                 });
-                
+
                 // Using virtual thread factory
                 try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
                     IntStream.range(0, 10_000).forEach(i -> {
@@ -1792,7 +1834,7 @@ public class Explorer {
                         });
                     });
                 }
-                
+
                 Key features now standard:
                 - Lightweight thread implementation
                 - Automatic thread pool management
@@ -1800,64 +1842,102 @@ public class Explorer {
                 - Better integration with existing threading APIs
                 - Enhanced monitoring capabilities
                 """);
-        
+
         delayBuffer();
       }
     }
   }
 
   private static void structured_concurrency(final int java) throws Exception {
-    if(java == 19) {
+    if (java == 19) {
       LOGGER.info("Java 19 :: Structured Concurrency (Preview)");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Structured Concurrency was introduced as a preview feature in Java 19.
                 It simplifies multithreaded programming by treating multiple tasks
                 running in different threads as a single unit of work.
-                
+
                 Example (when preview enabled):
                 try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
                     Future<String> user = scope.fork(() -> findUser());
                     Future<Integer> order = scope.fork(() -> fetchOrder());
-                    
+
                     scope.join();           // Wait for both forks
                     scope.throwIfFailed();  // ... and propagate errors
-                    
+
                     // Here, both forks have succeeded
                     processOrder(user.resultNow(), order.resultNow());
                 }
                 """);
-        
+
         delayBuffer();
       }
-    } else if(java == 22) {
+    } else if (java == 22) {
       LOGGER.info("Java 22 :: Structured Concurrency (Second Preview)");
-      System.out.println("""
+      System.out.println(
+          """
                 Structured Concurrency enters its second preview in Java 22. It continues to simplify concurrent programming by treating related tasks as a single unit of work, improving error handling and cancellation.
-                
+
                 Example (requires --enable-preview):
                 try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
                     Future<String> user = scope.fork(() -> findUser());
                     Future<Integer> order = scope.fork(() -> fetchOrder());
-                    
+
                     scope.join();           // Wait for both forks
                     scope.throwIfFailed();  // ... and propagate errors
-                    
+
                     // Here, both forks have succeeded
                     processOrder(user.resultNow(), order.resultNow());
                 }
-                
+
                 This feature requires the preview flag to run.
                 """);
-      // Uncomment the following block and run with --enable-preview on JDK 22+ to see Structured Concurrency in action:
+      // Uncomment the following block and run with --enable-preview on JDK 22+ to see Structured
+      // Concurrency in action:
       /*
       try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
           Future<String> user = scope.fork(() -> "user-data");
           Future<Integer> order = scope.fork(() -> 42);
-          
+
           scope.join();
           scope.throwIfFailed();
-          
+
+          System.out.println("User: " + user.resultNow());
+          System.out.println("Order: " + order.resultNow());
+      }
+      */
+      delayBuffer();
+    } else if (java == 23) {
+      LOGGER.info("Java 23 :: Structured Concurrency (Third Preview)");
+      System.out.println(
+          """
+                Structured Concurrency enters its third preview in Java 23. It continues to simplify concurrent programming by treating related tasks as a single unit of work, improving error handling and cancellation.
+
+                Example (requires --enable-preview):
+                try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+                    Future<String> user = scope.fork(() -> findUser());
+                    Future<Integer> order = scope.fork(() -> fetchOrder());
+
+                    scope.join();           // Wait for both forks
+                    scope.throwIfFailed();  // ... and propagate errors
+
+                    // Here, both forks have succeeded
+                    processOrder(user.resultNow(), order.resultNow());
+                }
+
+                This feature requires the preview flag to run.
+                """);
+      // Uncomment the following block and run with --enable-preview on JDK 23+ to see Structured
+      // Concurrency in action:
+      /*
+      try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+          Future<String> user = scope.fork(() -> "user-data");
+          Future<Integer> order = scope.fork(() -> 42);
+
+          scope.join();
+          scope.throwIfFailed();
+
           System.out.println("User: " + user.resultNow());
           System.out.println("Order: " + order.resultNow());
       }
@@ -1867,23 +1947,24 @@ public class Explorer {
   }
 
   private static void scoped_values(final int java) throws Exception {
-    if(java == 20) {
+    if (java == 20) {
       LOGGER.info("Java 20 :: Scoped Values (Preview)");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Scoped Values were introduced as a preview feature in Java 20.
                 They provide a way to share immutable data within and across threads,
                 offering a safer alternative to ThreadLocal.
-                
+
                 Key benefits:
                 - Immutable by design
                 - Bound to a specific scope
                 - Automatically cleaned up
                 - Thread-safe
-                
+
                 Example (when preview enabled):
                 final ScopedValue<String> TRANSACTION_ID = ScopedValue.newInstance();
-                
+
                 void processRequest() {
                     ScopedValue.where(TRANSACTION_ID, generateTransactionId())
                         .run(() -> {
@@ -1895,17 +1976,18 @@ public class Explorer {
                     // Value is not available here
                 }
                 """);
-        
+
         delayBuffer();
       }
-    } else if(java == 22) {
+    } else if (java == 22) {
       LOGGER.info("Java 22 :: Scoped Values (Second Preview)");
-      System.out.println("""
+      System.out.println(
+          """
                 Scoped Values enter their second preview in Java 22. They continue to provide a safer, immutable alternative to ThreadLocal for sharing data within and across threads.
-                
+
                 Example (requires --enable-preview):
                 final ScopedValue<String> USER_ID = ScopedValue.newInstance();
-                
+
                 void processRequest(String userId) {
                     ScopedValue.where(USER_ID, userId)
                         .run(() -> {
@@ -1916,13 +1998,51 @@ public class Explorer {
                         });
                     // Value is not available here
                 }
-                
+
                 This feature requires the preview flag to run.
                 """);
-      // Uncomment the following block and run with --enable-preview on JDK 22+ to see Scoped Values in action:
+      // Uncomment the following block and run with --enable-preview on JDK 22+ to see Scoped Values
+      // in action:
       /*
       final ScopedValue<String> USER_ID = ScopedValue.newInstance();
-      
+
+      void processRequest(String userId) {
+          ScopedValue.where(USER_ID, userId)
+              .run(() -> {
+                  System.out.println("User in scope: " + USER_ID.get());
+              });
+          // USER_ID is not available here
+      }
+      processRequest("alice");
+      */
+      delayBuffer();
+    } else if (java == 23) {
+      LOGGER.info("Java 23 :: Scoped Values (Third Preview)");
+      System.out.println(
+          """
+                Scoped Values enter their third preview in Java 23. They provide a safer, immutable alternative to ThreadLocal for sharing data within and across threads.
+
+                Example (requires --enable-preview):
+                final ScopedValue<String> USER_ID = ScopedValue.newInstance();
+
+                void processRequest(String userId) {
+                    ScopedValue.where(USER_ID, userId)
+                        .run(() -> {
+                            // Code here can access USER_ID
+                            String id = USER_ID.get();
+                            // Value is available even in child threads
+                            processSubTask();
+                        });
+                    // Value is not available here
+                }
+
+                This feature requires the preview flag to run.
+                """);
+      // Uncomment the following block and run with --enable-preview on JDK 23+ to see Scoped Values
+      // in action:
+      /*
+      final ScopedValue<String> USER_ID = ScopedValue.newInstance();
+
       void processRequest(String userId) {
           ScopedValue.where(USER_ID, userId)
               .run(() -> {
@@ -1937,25 +2057,27 @@ public class Explorer {
   }
 
   private static void unnamed_patterns(final int java) throws Exception {
-    if(java == 21) {
+    if (java == 21) {
       LOGGER.info("Java 21 :: Unnamed Patterns and Variables (Preview)");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Unnamed Patterns and Variables were introduced as a preview feature in Java 21.
                 They allow for the use of unnamed patterns and variables in pattern matching contexts.
-                
+
                 Example (when preview enabled):
                 if (obj instanceof String s) {
                     System.out.println(\"It's a string: \" + s);
                 }
                 """);
-        
+
         delayBuffer();
       }
-    } else if(java == 22) {
+    } else if (java == 22) {
       LOGGER.info("Java 22 :: Unnamed Variables & Patterns (Final)");
       {
-        System.out.println("""
+        System.out.println(
+            """
                 Unnamed variables and patterns are now a permanent feature in Java 22.
                 Use '_' as a variable or pattern name when the value is unused.
                 Examples:
@@ -1975,7 +2097,8 @@ public class Explorer {
         // Demo: lambda parameter
         Map<String, List<String>> map = Map.of();
         // The following is just a syntax example, not executable as map is immutable and empty
-        System.out.println("Lambda with unnamed parameter: map.computeIfAbsent(key, _ -> new ArrayList<>())");
+        System.out.println(
+            "Lambda with unnamed parameter: map.computeIfAbsent(key, _ -> new ArrayList<>())");
 
         // Demo: for-each loop
         List<String> list = List.of("a", "b", "c");
@@ -1989,11 +2112,105 @@ public class Explorer {
         record Point(int x, int y) {}
         Object obj = new Point(42, 99);
         if (obj instanceof Point(int x, _)) {
-          System.out.println("Matched Point with x = " + x + ", y is ignored using unnamed pattern");
+          System.out.println(
+              "Matched Point with x = " + x + ", y is ignored using unnamed pattern");
         }
 
         delayBuffer();
       }
+    }
+  }
+
+  /**
+   * Java 22 :: Statements Before super(...) (Preview) Demonstrates the ability to have statements
+   * before an explicit constructor invocation.
+   */
+  private static void language_modifications(final int java) throws Exception {
+    if (java == 22) {
+      LOGGER.info("Java 22 :: Statements Before super(...) (Preview)");
+      System.out.println(
+          """
+              In Java 22 (preview), you can now write statements before calling super() or this() in a constructor,
+              as long as those statements do not reference the instance being created (no 'this' or instance fields).
+              This allows for argument validation, preparation, and sharing before delegating to the superclass constructor.
+
+              Example (requires --enable-preview):
+              class Rectangle {
+                  int width, height;
+                  Rectangle(int width, int height) {
+                      this.width = width;
+                      this.height = height;
+                  }
+              }
+              class Square extends Rectangle {
+                  Square(int area) {
+                      if (area < 0) throw new IllegalArgumentException();
+                      int side = (int)Math.sqrt(area);
+                      super(side, side);
+                  }
+              }
+              // new Square(49); // Will print order of execution
+              """);
+      delayBuffer();
+    } else if (java == 23) {
+      LOGGER.info("Java 23 :: Flexible Constructor Bodies (Second Preview)");
+      System.out.println(
+          """
+              Flexible Constructor Bodies are in their second preview in Java 23. This feature allows statements that do not reference the instance being created to appear before an explicit constructor invocation (super() or this()).
+
+              Example (requires --enable-preview):
+              public class MyClass {
+                  private int value;
+                  public MyClass(int value) {
+                      int preInitialization = value * 2;  // Non-referential statement
+                      this.value = preInitialization;      // Initialization
+                  }
+              }
+              """);
+      class MyClass {
+        private int value;
+
+        public MyClass(int value) {
+          int preInitialization = value * 2; // Non-referential statement
+          this.value = preInitialization; // Initialization
+        }
+      }
+
+      var myClass = new MyClass(42);
+      System.out.println(myClass.value);
+      delayBuffer();
+    }
+  }
+
+  /**
+   * Java 23 :: Primitive Types in Patterns, instanceof, and switch (Preview) Demonstrates pattern
+   * matching with primitive types in switch and instanceof.
+   */
+  private static void primitive_patterns(final int java) throws Exception {
+    if (java == 23) {
+      LOGGER.info("Java 23 :: Primitive Types in Patterns, instanceof, and switch (Preview)");
+      System.out.println(
+          """
+              Java 23 allows pattern matching with primitive types in switch and instanceof statements.\n\n" +
+              "Example (requires --enable-preview):\n" +
+              "Object obj = 42;\n" +
+              "switch (obj) {\n" +
+              "    case Integer i -> System.out.println(\"Integer: \" + i);\n" +
+              "    case Long l    -> System.out.println(\"Long: \" + l);\n" +
+              "    default        -> System.out.println(\"Other: \" + obj);\n" +
+              "}\n\n" +
+              "This feature requires the preview flag to run.\n""");
+      // Uncomment the following block and run with --enable-preview on JDK 23+ to see this in
+      // action:
+      /*
+      Object obj = 42;
+      switch (obj) {
+          case Integer i -> System.out.println("Integer: " + i);
+          case Long l    -> System.out.println("Long: " + l);
+          default        -> System.out.println("Other: " + obj);
+      }
+      */
+      delayBuffer();
     }
   }
 
