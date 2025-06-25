@@ -1,10 +1,22 @@
 # the-toolbox
 
-A personal, educational Java toolbox and scratchpad for exploring the evolution of Java language and library features, version by version. This project demonstrates, with code and commentary, the most important features added in each Java release from Java 8 through Java 23.
+A personal, educational Java toolbox and scratchpad for exploring the evolution of Java language and library features, version by version. This project demonstrates, with code and commentary, the most important features added in each Java release from Java 8 through Java 24.
 
 ---
 
 ## Java Version Feature Highlights
+
+### Java 24 (2025)
+- **Stream Gatherers (final):** Custom stream windowing/folding operations, now standard.
+- **Scoped Values (Fourth Preview):** Safer, immutable alternative to ThreadLocal (preview).
+- **Structured Concurrency (Fourth Preview):** Treat related tasks as a single unit of work (preview).
+- **Primitive Types in Patterns, instanceof, and switch (Second Preview):** Pattern matching with primitives in switch/instanceof (preview).
+- **Flexible Constructor Bodies (Third Preview):** Statements before super()/this() in constructors (preview).
+- **Unnamed Variables & Patterns (final):** Use `_` for unused variables/patterns everywhere.
+- **Class-File API:** New standard API for parsing/generating Java class files (advanced, JEP 484).
+- **Vector API (Ninth Incubator):** SIMD/vectorized computation for high performance (incubator).
+- **Prepare to Restrict the Use of JNI:** Lays groundwork for future JNI restrictions (JEP 472).
+- **Warn upon Use of Memory-Access Methods in sun.misc.Unsafe:** Runtime warnings for unsafe memory access (JEP 498).
 
 ### Java 23 (2024)
 - **Primitive Types in Patterns, instanceof, and switch (Preview):** Pattern matching with primitives in switch and instanceof.
@@ -107,7 +119,7 @@ A personal, educational Java toolbox and scratchpad for exploring the evolution 
 
 ## Feature Evolution Paths
 
-### Streams Evolution (Java 8 → 23)
+### Streams Evolution (Java 8 → 24)
 | Java Version | Streams Feature Added/Changed |
 |--------------|------------------------------|
 | 8            | Streams API introduced: map, filter, reduce, parallel streams, collectors |
@@ -116,7 +128,8 @@ A personal, educational Java toolbox and scratchpad for exploring the evolution 
 | 12           | `Collectors.teeing` |
 | 16           | `Stream.toList()` |
 | 22 (Preview) | Stream Gatherers (windowing, folding, custom gatherers) |
-| 23           | Stream Gatherers finalized |
+| 23           | Stream Gatherers finalized (late preview/final) |
+| 24           | Stream Gatherers (final, standard) |
 
 ### Streams Subway Map
 ```
@@ -132,10 +145,8 @@ Java 8 ──▶ Java 9 ──▶ Java 10 ──▶ Java 12 ──▶ Java 16 �
 |--------------|---------------------------------------|
 | 14           | Pattern matching for `instanceof` (preview) |
 | 16           | Pattern matching for `instanceof` (standard) |
-| 17-18        | Pattern matching for `switch` (preview) |
-| 19-20        | Record patterns (preview), more switch improvements |
-| 21           | Pattern matching for `switch` and record patterns (standard) |
-| 23           | Primitive types in patterns, instanceof, and switch (preview) |
+| 18–21        | Pattern matching for `switch` (preview/standard) |
+| 23–24        | Primitive types in patterns, instanceof, and switch (preview) |
 
 ### Pattern Matching Subway Map
 ```
@@ -152,7 +163,7 @@ Java 14 ──▶ Java 16 ──▶ Java 18 ──▶ Java 19 ──▶ Java 21 
 |--------------|------------------------------|
 | 14           | Records introduced (preview) |
 | 16           | Records: inner class support, refinements |
-| 19-20        | Record patterns (preview) |
+| 19–20        | Record patterns (preview) |
 | 21           | Record patterns (standard) |
 
 ### Records Subway Map
@@ -188,8 +199,7 @@ Java 9 ──▶ Java 10 ──▶ Java 11 ──▶ Java 21
 | 19           | Virtual threads (preview), structured concurrency (preview) |
 | 20           | Virtual threads (2nd preview), structured concurrency (2nd preview), scoped values (preview) |
 | 21           | Virtual threads (standard), structured concurrency (improved), scoped values (preview) |
-| 22           | Structured concurrency (2nd preview), scoped values (2nd preview) |
-| 23           | Structured concurrency (3rd preview), scoped values (3rd preview) |
+| 22–24        | Structured concurrency (2nd–4th preview), scoped values (2nd–4th preview) |
 
 ### Concurrency Subway Map
 ```
@@ -212,7 +222,7 @@ Java 19 ──▶ Java 20 ──▶ Java 21 ──▶ Java 22 ──▶ Java 23
 | 12           | `indent` method |
 | 15           | Text blocks (multi-line strings) |
 | 18           | UTF-8 by default |
-| 21-22        | String templates (preview) |
+| 21–23        | String templates (preview) |
 
 ### String Handling Subway Map
 ```
@@ -230,7 +240,7 @@ Java 11 ──▶ Java 12 ──▶ Java 15 ──▶ Java 18 ──▶ Java 21 
 
 ## How to Use
 
-- **Requirements:** Java 23+ (some features require preview flags or newer JDKs)
+- **Requirements:** Java 24+ recommended for latest features; some features require preview flags or newer JDKs
 - **Run:**
   ```sh
   mvn compile exec:java -Dexec.mainClass=language.features.Explorer

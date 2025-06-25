@@ -65,6 +65,7 @@ public class Explorer {
   private static final Logger LOGGER = Logger.getLogger(Explorer.class.getName());
 
   public static void main(String[] args) throws Exception {
+    java24();
     java23();
     java22();
     java21();
@@ -336,8 +337,6 @@ public class Explorer {
     records(20);
     virtual_threads(20);
     scoped_values(20);
-
-    // System.exit(0);
   }
 
   /**
@@ -362,8 +361,6 @@ public class Explorer {
     switch_expression(21);
     virtual_threads(21);
     unnamed_patterns(21);
-
-    // System.exit(0);
   }
 
   /**
@@ -386,7 +383,6 @@ public class Explorer {
     structured_concurrency(22);
     scoped_values(22);
     string(22);
-    // (Other feature demos to be added in subsequent steps)
   }
 
   /**
@@ -407,6 +403,36 @@ public class Explorer {
     structured_concurrency(23);
     scoped_values(23);
     language_modifications(23);
+  }
+
+  /**
+   * Features added in Java 24:
+   *
+   * <ul>
+   *   <li>Stream Gatherers (final)
+   *   <li>Scoped Values (4th preview)
+   *   <li>Structured Concurrency (4th preview)
+   *   <li>Primitive Types in Patterns, instanceof, and switch (2nd preview)
+   *   <li>Flexible Constructor Bodies (3rd preview)
+   *   <li>Unnamed Variables & Patterns (final)
+   *   <li>Class-File API
+   *   <li>Vector API (incubator)
+   *   <li>Prepare to Restrict the Use of JNI
+   *   <li>Warn upon Use of Memory-Access Methods in sun.misc.Unsafe
+   * </ul>
+   */
+  private static void java24() throws Exception {
+    // Features added in Java 24
+    streams(24);
+    scoped_values(24);
+    structured_concurrency(24);
+    primitive_patterns(24);
+    language_modifications(24);
+    unnamed_patterns(24);
+    class_file_api(24);
+    vector_api(24);
+    restrict_jni(24);
+    unsafe_warnings(24);
     // (Other feature demos to be added in subsequent steps)
   }
 
@@ -1362,43 +1388,25 @@ public class Explorer {
 
         delayBuffer();
       }
-    } else if (java == 22) {
-      LOGGER.info("Java 22 :: Stream Gatherers (Preview)");
+    } else if (java == 22 || java == 23 || java == 24) {
+      LOGGER.info("Java 24 :: Stream Gatherers (Final)");
       System.out.println(
           """
-              Stream Gatherers are a preview feature in Java 22. They allow you to define custom intermediate operations in stream pipelines, such as windowing and folding, using the new gather() method and Gatherers utility class.
-
-              Example (requires --enable-preview):
-              List<String> words = List.of(\"the\", \"be\", \"two\", \"of\", \"and\", \"a\", \"in\", \"that\");
-              List<List<String>> fixedWindows = words.stream()
-                  .gather(Gatherers.windowFixed(3))
-                  .toList();
-              System.out.println(fixedWindows); // [[the, be, two], [of, and, a], [in, that]]
-
-              This feature enables more flexible and powerful stream processing, but requires the preview flag to run.
+              Stream Gatherers are finalized in Java 24!\n" +
+              "They allow you to define custom intermediate operations in stream pipelines, such as windowing and folding, using the gather() method and Gatherers utility class.\n" +
+              "\n" +
+              "Example:\n" +
+              "List<String> words = List.of(\"the\", \"be\", \"two\", \"of\", \"and\", \"a\", \"in\", \"that\");\n" +
+              "List<List<String>> fixedWindows = words.stream()\n" +
+              "    .gather(Gatherers.windowFixed(5))\n" +
+              "    .toList();\n" +
+              "System.out.println(fixedWindows); // [[the, be, two, of, and], [a, in, that]]\n" +
+              "\n" +
+              "This feature is now standard and does not require preview flags!\n"
               """);
       List<String> words = List.of("the", "be", "two", "of", "and", "a", "in", "that");
-      List<List<String>> fixedWindows = words.stream().gather(Gatherers.windowFixed(3)).toList();
-      System.out.println(fixedWindows); // [[the, be, two], [of, and, a], [in, that]]
-      delayBuffer();
-    } else if (java == 23) {
-      LOGGER.info("Java 23 :: Stream Gatherers (Final/Preview)");
-      System.out.println(
-          """
-              Stream Gatherers are finalized (or in late preview) in Java 23. They allow you to define custom intermediate operations in stream pipelines, such as windowing and folding, using the gather() method and Gatherers utility class.
-
-              Example (requires --enable-preview):
-              List<String> words = List.of(\"the\", \"be\", \"two\", \"of\", \"and\", \"a\", \"in\", \"that\");
-              List<List<String>> fixedWindows = words.stream()
-                  .gather(Gatherers.windowFixed(4))
-                  .toList();
-              System.out.println(fixedWindows); // [[the, be, two, of], [and, a, in, that]]
-
-              This feature enables more flexible and powerful stream processing, but requires the preview flag to run.
-              """);
-      List<String> words = List.of("the", "be", "two", "of", "and", "a", "in", "that");
-      List<List<String>> fixedWindows = words.stream().gather(Gatherers.windowFixed(4)).toList();
-      System.out.println(fixedWindows); // [[the, be, two, of], [and, a, in, that]]
+      List<List<String>> fixedWindows = words.stream().gather(Gatherers.windowFixed(5)).toList();
+      System.out.println(fixedWindows); // [[the, be, two, of, and], [a, in, that]]
       delayBuffer();
     }
   }
@@ -1476,38 +1484,7 @@ public class Explorer {
 
         delayBuffer();
       }
-    }
-    // } else if(java == 21) {
-    //   LOGGER.info("Java 21 :: String Templates (Preview)");
-    //   {
-    //     System.out.println("""
-    //             String Templates were introduced as a preview feature in Java 21.
-    //             They provide a more readable way to embed expressions inside string literals.
-    //             Example (when preview enabled):
-    //             String name = "world";
-    //             String message = STR."Hello {name}!";
-    //       """);
-
-    //             // Multi-line with expressions
-    //             int x = 10, y = 20;
-    //             String result = STR.\"\"\"
-    //                 The sum of \{x} and \{y}
-    //                 is \{x + y}
-    //                 \"\"\";
-
-    //             // Raw string template
-    //             String json = RAW.\"\"\"
-    //                 {
-    //                     "name": "\{name}",
-    //                     "value": \{x + y}
-    //                 }
-    //                 \"\"\";
-    //             """);
-
-    //     delayBuffer();
-    //   }
-    // }
-    else if (java == 22) {
+    } else if (java == 21 || java == 22) {
       LOGGER.info("Java 22 :: String Templates (Second Preview)");
       System.out.println(
           "String Templates enter their second preview in Java 22. They provide a more readable way to embed expressions inside string literals, using template processors like STR.\n"
@@ -1873,11 +1850,11 @@ public class Explorer {
 
         delayBuffer();
       }
-    } else if (java == 22) {
-      LOGGER.info("Java 22 :: Structured Concurrency (Second Preview)");
+    } else if (java == 22 || java == 23 || java == 24) {
+      LOGGER.info("Java 24 :: Structured Concurrency (Fourth Preview)");
       System.out.println(
           """
-                Structured Concurrency enters its second preview in Java 22. It continues to simplify concurrent programming by treating related tasks as a single unit of work, improving error handling and cancellation.
+                Structured Concurrency enters its fourth preview in Java 24. It continues to simplify concurrent programming by treating related tasks as a single unit of work, improving error handling and cancellation.
 
                 Example (requires --enable-preview):
                 try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
@@ -1893,42 +1870,7 @@ public class Explorer {
 
                 This feature requires the preview flag to run.
                 """);
-      // Uncomment the following block and run with --enable-preview on JDK 22+ to see Structured
-      // Concurrency in action:
-      /*
-      try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
-          Future<String> user = scope.fork(() -> "user-data");
-          Future<Integer> order = scope.fork(() -> 42);
-
-          scope.join();
-          scope.throwIfFailed();
-
-          System.out.println("User: " + user.resultNow());
-          System.out.println("Order: " + order.resultNow());
-      }
-      */
-      delayBuffer();
-    } else if (java == 23) {
-      LOGGER.info("Java 23 :: Structured Concurrency (Third Preview)");
-      System.out.println(
-          """
-                Structured Concurrency enters its third preview in Java 23. It continues to simplify concurrent programming by treating related tasks as a single unit of work, improving error handling and cancellation.
-
-                Example (requires --enable-preview):
-                try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
-                    Future<String> user = scope.fork(() -> findUser());
-                    Future<Integer> order = scope.fork(() -> fetchOrder());
-
-                    scope.join();           // Wait for both forks
-                    scope.throwIfFailed();  // ... and propagate errors
-
-                    // Here, both forks have succeeded
-                    processOrder(user.resultNow(), order.resultNow());
-                }
-
-                This feature requires the preview flag to run.
-                """);
-      // Uncomment the following block and run with --enable-preview on JDK 23+ to see Structured
+      // Uncomment the following block and run with --enable-preview on JDK 24+ to see Structured
       // Concurrency in action:
       /*
       try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
@@ -1979,20 +1921,20 @@ public class Explorer {
 
         delayBuffer();
       }
-    } else if (java == 22) {
-      LOGGER.info("Java 22 :: Scoped Values (Second Preview)");
+    } else if (java == 22 || java == 23 || java == 24) {
+      LOGGER.info("Java 24 :: Scoped Values (Fourth Preview)");
       System.out.println(
           """
-                Scoped Values enter their second preview in Java 22. They continue to provide a safer, immutable alternative to ThreadLocal for sharing data within and across threads.
+                Scoped Values enter their fourth preview in Java 24. They provide a safer, immutable alternative to ThreadLocal for sharing data within and across threads.
 
                 Example (requires --enable-preview):
-                final ScopedValue<String> USER_ID = ScopedValue.newInstance();
+                final ScopedValue<String> SESSION_ID = ScopedValue.newInstance();
 
-                void processRequest(String userId) {
-                    ScopedValue.where(USER_ID, userId)
+                void processRequest(String sessionId) {
+                    ScopedValue.where(SESSION_ID, sessionId)
                         .run(() -> {
-                            // Code here can access USER_ID
-                            String id = USER_ID.get();
+                            // Code here can access SESSION_ID
+                            String id = SESSION_ID.get();
                             // Value is available even in child threads
                             processSubTask();
                         });
@@ -2001,56 +1943,19 @@ public class Explorer {
 
                 This feature requires the preview flag to run.
                 """);
-      // Uncomment the following block and run with --enable-preview on JDK 22+ to see Scoped Values
+      // Uncomment the following block and run with --enable-preview on JDK 24+ to see Scoped Values
       // in action:
       /*
-      final ScopedValue<String> USER_ID = ScopedValue.newInstance();
+      final ScopedValue<String> SESSION_ID = ScopedValue.newInstance();
 
-      void processRequest(String userId) {
-          ScopedValue.where(USER_ID, userId)
+      void processRequest(String sessionId) {
+          ScopedValue.where(SESSION_ID, sessionId)
               .run(() -> {
-                  System.out.println("User in scope: " + USER_ID.get());
+                  System.out.println("Session in scope: " + SESSION_ID.get());
               });
-          // USER_ID is not available here
+          // SESSION_ID is not available here
       }
-      processRequest("alice");
-      */
-      delayBuffer();
-    } else if (java == 23) {
-      LOGGER.info("Java 23 :: Scoped Values (Third Preview)");
-      System.out.println(
-          """
-                Scoped Values enter their third preview in Java 23. They provide a safer, immutable alternative to ThreadLocal for sharing data within and across threads.
-
-                Example (requires --enable-preview):
-                final ScopedValue<String> USER_ID = ScopedValue.newInstance();
-
-                void processRequest(String userId) {
-                    ScopedValue.where(USER_ID, userId)
-                        .run(() -> {
-                            // Code here can access USER_ID
-                            String id = USER_ID.get();
-                            // Value is available even in child threads
-                            processSubTask();
-                        });
-                    // Value is not available here
-                }
-
-                This feature requires the preview flag to run.
-                """);
-      // Uncomment the following block and run with --enable-preview on JDK 23+ to see Scoped Values
-      // in action:
-      /*
-      final ScopedValue<String> USER_ID = ScopedValue.newInstance();
-
-      void processRequest(String userId) {
-          ScopedValue.where(USER_ID, userId)
-              .run(() -> {
-                  System.out.println("User in scope: " + USER_ID.get());
-              });
-          // USER_ID is not available here
-      }
-      processRequest("alice");
+      processRequest("session-42");
       */
       delayBuffer();
     }
@@ -2118,6 +2023,38 @@ public class Explorer {
 
         delayBuffer();
       }
+    } else if (java == 24) {
+      LOGGER.info("Java 24 :: Unnamed Variables & Patterns (Final)");
+      System.out.println(
+          """
+                Unnamed variables and patterns are a permanent feature in Java 24.
+                Use '_' as a variable or pattern name when the value is unused.
+                Examples:
+                - Catch block: catch (Exception _) { ... }
+                - Lambda: map.computeIfAbsent(key, _ -> new ArrayList<>())
+                - For-each: for (var _ : list) { ... }
+                - Record pattern: if (obj instanceof Point(int x, _)) { ... }
+                """);
+      // Demo: catch block
+      try {
+        Integer.parseInt("not_a_number");
+      } catch (NumberFormatException _) {
+        System.out.println("Caught NumberFormatException with unnamed variable");
+      }
+      // Demo: for-each loop
+      List<String> list = List.of("a", "b", "c");
+      int count = 0;
+      for (var _ : list) {
+        count++;
+      }
+      System.out.println("Counted elements using unnamed variable in for-each: " + count);
+      // Demo: record pattern
+      record Point(int x, int y) {}
+      Object obj = new Point(42, 99);
+      if (obj instanceof Point(int x, _)) {
+        System.out.println("Matched Point with x = " + x + ", y is ignored using unnamed pattern");
+      }
+      delayBuffer();
     }
   }
 
@@ -2152,32 +2089,36 @@ public class Explorer {
               // new Square(49); // Will print order of execution
               """);
       delayBuffer();
-    } else if (java == 23) {
-      LOGGER.info("Java 23 :: Flexible Constructor Bodies (Second Preview)");
+    } else if (java == 23 || java == 24) {
+      LOGGER.info("Java 24 :: Flexible Constructor Bodies (Third Preview)");
       System.out.println(
           """
-              Flexible Constructor Bodies are in their second preview in Java 23. This feature allows statements that do not reference the instance being created to appear before an explicit constructor invocation (super() or this()).
+                Flexible Constructor Bodies are in their third preview in Java 24. This feature allows statements that do not reference the instance being created to appear before an explicit constructor invocation (super() or this()).
 
-              Example (requires --enable-preview):
-              public class MyClass {
-                  private int value;
-                  public MyClass(int value) {
-                      int preInitialization = value * 2;  // Non-referential statement
-                      this.value = preInitialization;      // Initialization
-                  }
-              }
-              """);
-      class MyClass {
-        private int value;
+                Example (requires --enable-preview):
+                public class MyClass {
+                    private int value;
+                    public MyClass(int value) {
+                        int preInitialization = value * 3;  // Non-referential statement
+                        this.value = preInitialization;      // Initialization
+                    }
+                }
 
-        public MyClass(int value) {
-          int preInitialization = value * 2; // Non-referential statement
-          this.value = preInitialization; // Initialization
-        }
+                This feature requires the preview flag to run.
+                """);
+      // Uncomment the following block and run with --enable-preview on JDK 24+ to see Flexible
+      // Constructor Bodies in action:
+      /*
+      public class MyClass {
+          private int value;
+          public MyClass(int value) {
+              int preInitialization = value * 3;  // Non-referential statement
+              this.value = preInitialization;      // Initialization
+          }
       }
-
       var myClass = new MyClass(42);
       System.out.println(myClass.value);
+      */
       delayBuffer();
     }
   }
@@ -2187,20 +2128,24 @@ public class Explorer {
    * matching with primitive types in switch and instanceof.
    */
   private static void primitive_patterns(final int java) throws Exception {
-    if (java == 23) {
-      LOGGER.info("Java 23 :: Primitive Types in Patterns, instanceof, and switch (Preview)");
+    if (java == 23 || java == 24) {
+      LOGGER.info(
+          "Java 24 :: Primitive Types in Patterns, instanceof, and switch (Second Preview)");
       System.out.println(
           """
-              Java 23 allows pattern matching with primitive types in switch and instanceof statements.\n\n" +
-              "Example (requires --enable-preview):\n" +
-              "Object obj = 42;\n" +
-              "switch (obj) {\n" +
-              "    case Integer i -> System.out.println(\"Integer: \" + i);\n" +
-              "    case Long l    -> System.out.println(\"Long: \" + l);\n" +
-              "    default        -> System.out.println(\"Other: \" + obj);\n" +
-              "}\n\n" +
-              "This feature requires the preview flag to run.\n""");
-      // Uncomment the following block and run with --enable-preview on JDK 23+ to see this in
+                Java 24 allows pattern matching with primitive types in switch and instanceof statements (second preview).
+
+                Example (requires --enable-preview):
+                Object obj = 42;
+                switch (obj) {
+                    case Integer i -> System.out.println("Integer: " + i);
+                    case Long l    -> System.out.println("Long: " + l);
+                    default        -> System.out.println("Other: " + obj);
+                }
+
+                This feature requires the preview flag to run.
+                """);
+      // Uncomment the following block and run with --enable-preview on JDK 24+ to see this in
       // action:
       /*
       Object obj = 42;
@@ -2210,6 +2155,85 @@ public class Explorer {
           default        -> System.out.println("Other: " + obj);
       }
       */
+      delayBuffer();
+    }
+  }
+
+  private static void class_file_api(final int java) throws Exception {
+    if (java == 24) {
+      LOGGER.info("Java 24 :: Class-File API");
+      System.out.println(
+          """
+                Java 24 introduces the Class-File API (JEP 484), a new standard API for parsing, generating, and transforming Java class files.
+                This is an advanced feature for tools and frameworks that need to work with bytecode directly.
+
+                Example usage (not a real demo):
+                // Parse a class file
+                ClassFile cf = ClassFile.read(Paths.get("MyClass.class"));
+                // Inspect methods, fields, attributes, etc.
+                for (MethodInfo m : cf.methods()) {
+                    System.out.println(m.name());
+                }
+                // Modify and write back
+                cf.write(Paths.get("MyClassModified.class"));
+
+                See JEP 484 for details. This is a low-level, expert feature.
+                """);
+      delayBuffer();
+    }
+  }
+
+  private static void vector_api(final int java) throws Exception {
+    if (java == 24) {
+      LOGGER.info("Java 24 :: Vector API (Incubator)");
+      System.out.println(
+          """
+                Java 24 includes the Vector API (JEP 489, Ninth Incubator), which enables developers to express vector computations that reliably compile at runtime to optimal vector instructions on supported hardware.
+                This is an incubator feature and may require special flags to enable.
+
+                Example usage (not a real demo):
+                // Vector computation example
+                Vector<Integer> va = IntVector.fromArray(IntVector.SPECIES_256, a, 0);
+                Vector<Integer> vb = IntVector.fromArray(IntVector.SPECIES_256, b, 0);
+                Vector<Integer> vc = va.add(vb);
+                vc.intoArray(c, 0);
+
+                See JEP 489 for details. This is a low-level, performance-oriented feature.
+                """);
+      delayBuffer();
+    }
+  }
+
+  private static void restrict_jni(final int java) throws Exception {
+    if (java == 24) {
+      LOGGER.info("Java 24 :: Prepare to Restrict the Use of JNI (JEP 472)");
+      System.out.println(
+          """
+                Java 24 prepares to restrict the use of the Java Native Interface (JNI) to improve security and maintainability.
+                This is mostly relevant for library and JVM developers. Most application code is unaffected.
+
+                Summary:
+                - Warns about unsafe or discouraged JNI usage
+                - Lays groundwork for future restrictions
+                - Encourages migration to safer APIs
+                """);
+      delayBuffer();
+    }
+  }
+
+  private static void unsafe_warnings(final int java) throws Exception {
+    if (java == 24) {
+      LOGGER.info("Java 24 :: Warn upon Use of Memory-Access Methods in sun.misc.Unsafe (JEP 498)");
+      System.out.println(
+          """
+                Java 24 adds warnings when using certain memory-access methods in sun.misc.Unsafe, as part of the ongoing effort to encapsulate and eventually remove unsafe APIs.
+                This is mostly relevant for low-level libraries and frameworks.
+
+                Summary:
+                - Warns at runtime when using unsafe memory-access methods
+                - Encourages migration to supported APIs
+                - Part of long-term plan to encapsulate sun.misc.Unsafe
+                """);
       delayBuffer();
     }
   }
