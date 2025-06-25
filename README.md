@@ -133,11 +133,11 @@ A personal, educational Java toolbox and scratchpad for exploring the evolution 
 
 ### Streams Subway Map
 ```
-Java 8 ──▶ Java 9 ──▶ Java 10 ──▶ Java 12 ──▶ Java 16 ──▶ Java 22 ──▶ Java 23
-  │         │           │           │           │           │           │
-  │         │           │           │           │           │           │
-  └─ Streams API   ── dropWhile,   ── toUnmod   ── teeing   ── toList   ── Gatherers (preview) ── Gatherers (final)
-     introduced        takeWhile      Collectors   Collector   method      (windowing, folding)     (finalized)
+Java 8 ──▶ Java 9 ──▶ Java 10 ──▶ Java 12 ──▶ Java 16 ──▶ Java 24 [final]
+  │         │           │           │           │           │
+  │         │           │           │           │           │
+  └─ Streams API   ── dropWhile,   ── toUnmod   ── teeing   ── toList   ── Gatherers (final)
+     introduced        takeWhile      Collectors   Collector   method      (windowing, folding)
 ```
 
 ### Pattern Matching & instanceof Evolution
@@ -150,12 +150,11 @@ Java 8 ──▶ Java 9 ──▶ Java 10 ──▶ Java 12 ──▶ Java 16 �
 
 ### Pattern Matching Subway Map
 ```
-Java 14 ──▶ Java 16 ──▶ Java 18 ──▶ Java 19 ──▶ Java 21 ──▶ Java 23
-  │         │           │           │           │           │
-  │         │           │           │           │           │
-  └─ instanceof   ── instanceof   ── switch    ── record   ── switch &  ── primitives in
-     (preview)        (standard)      (preview)    patterns    record      patterns/switch
-                                               (preview)    (standard)   (preview)
+Java 14 ──▶ Java 16 ──▶ Java 18-21 [grouped] ──▶ Java 23 [preview] ──▶ Java 24 [preview]
+  │         │           │                        │                    │
+  │         │           │                        │                    │
+  └─ instanceof   ── instanceof   ── switch pattern matching   ── Primitive types in patterns
+     patterns         with var         (preview→standard)         (preview, then 2nd preview)
 ```
 
 ### Records Evolution
@@ -168,12 +167,11 @@ Java 14 ──▶ Java 16 ──▶ Java 18 ──▶ Java 19 ──▶ Java 21 
 
 ### Records Subway Map
 ```
-Java 14 ──▶ Java 16 ──▶ Java 19 ──▶ Java 21
-  │         │           │           │
-  │         │           │           │
-  └─ Records    ── inner class  ── record   ── record
-     (preview)      support         patterns    patterns
-                    & refinements   (preview)   (standard)
+Java 14 ──▶ Java 16 ──▶ Java 19-20 [preview] ──▶ Java 21 [standard]
+  │         │           │                        │
+  │         │           │                        │
+  └─ Records   ── Inner records   ── Record patterns (preview)   ── Record patterns (standard)
+     (preview)      as class mem      (destructuring, guards)      (fully standard)
 ```
 
 ### Collections Evolution
@@ -189,8 +187,8 @@ Java 14 ──▶ Java 16 ──▶ Java 19 ──▶ Java 21
 Java 9 ──▶ Java 10 ──▶ Java 11 ──▶ Java 21
   │         │           │           │
   │         │           │           │
-  └─ Factory    ── Unmodifiable ── toArray   ── Sequenced
-     methods        collections      method      collections
+  └─ Factory   ── Unmod   ── toArray   ── Sequenced
+     methods      copy        method       Collections
 ```
 
 ### Concurrency Evolution
@@ -203,16 +201,12 @@ Java 9 ──▶ Java 10 ──▶ Java 11 ──▶ Java 21
 
 ### Concurrency Subway Map
 ```
-Java 19 ──▶ Java 20 ──▶ Java 21 ──▶ Java 22 ──▶ Java 23
-  │         │           │           │           │
-  │         │           │           │           │
-  └─ Virtual    ── Virtual    ── Virtual   ── Structured ── Structured
-     threads,      threads,      threads,     concurrency   concurrency
-     structured    structured    structured   (2nd preview) (3rd preview)
-     concurrency   concurrency   concurrency  scoped values scoped values
-     (preview)     (2nd preview) (standard)  (2nd preview) (3rd preview)
-     scoped values scoped values scoped values
-     (preview)     (preview)     (preview)
+Java 19 [preview] ──▶ Java 20-21 [preview/standard] ──▶ Java 22-24 [preview/final]
+  │                        │                              │
+  │                        │                              │
+  └─ Structured   ── Virtual threads,   ── Structured concurrency, Scoped Values
+     concurrency      Scoped Values         (4th preview), Scoped Values (4th preview)
+     (preview)        (preview→standard)   (finalized in Java 24)
 ```
 
 ### String Handling Evolution
@@ -226,14 +220,21 @@ Java 19 ──▶ Java 20 ──▶ Java 21 ──▶ Java 22 ──▶ Java 23
 
 ### String Handling Subway Map
 ```
-Java 11 ──▶ Java 12 ──▶ Java 15 ──▶ Java 18 ──▶ Java 21 ──▶ Java 22
-  │         │           │           │           │           │
-  │         │           │           │           │           │
-  └─ New string ── indent   ── Text    ── UTF-8   ── String    ── String
-     methods        method      blocks     default     templates    templates
-     (isBlank,                  (multi-                (preview)    (2nd preview)
-     lines, strip,              line)
-     repeat)
+Java 11 ──▶ Java 12 ──▶ Java 18 ──▶ Java 21-22 [preview] ──▶ Java 24
+  │         │           │           │                        │
+  │         │           │           │                        │
+  └─ New     ── indent   ── UTF-8    ── String templates      ── Unnamed variables & patterns
+     methods      method     default      (preview)                (final)
+```
+
+### New Java 24 Features Subway Map
+```
+Java 24
+  │
+  ├─ Class-File API: Standard API for parsing/generating class files
+  ├─ Vector API: Incubator for vectorized computations
+  ├─ Restrict JNI: Prepares to restrict Java Native Interface usage
+  └─ Unsafe Warnings: Warns on use of sun.misc.Unsafe memory-access methods
 ```
 
 ---
